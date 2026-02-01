@@ -1,0 +1,58 @@
+---
+interface Props {
+  href: string;
+  class?: string;
+  unstyled?: boolean;
+  [key: string]: any;
+}
+
+const { href, class: className, unstyled = false, ...rest } = Astro.props;
+
+const isExternal = href.startsWith("http://") || href.startsWith("https://");
+const linkClass = unstyled ? className : ["link", className];
+---
+
+{isExternal ? (
+  <a href={href} target="_blank" rel="noopener noreferrer" class:list={linkClass} {...rest}>
+    <slot />
+  </a>
+) : (
+  <a href={href} class:list={linkClass} {...rest}>
+    <slot />
+  </a>
+)}
+
+<style>
+  .link {
+    position: relative;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 2px 4px;
+    margin: -2px -4px;
+    border-radius: 2px;
+    transition: color 200ms ease-out;
+  }
+
+  .link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: black;
+    border-radius: 2px;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 200ms ease-out;
+    z-index: -1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover {
+      color: white;
+      text-decoration: none;
+    }
+
+    .link:hover::before {
+      transform: scaleY(1);
+    }
+  }
+</style>

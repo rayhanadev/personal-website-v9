@@ -1,13 +1,15 @@
 ---
+import Link from "./Link.astro";
+
 const NAVIGATION = [
   { name: "About", href: "/about" },
   { name: "Work", href: "/work" },
-  { name: "Reading", href: "/reading" },
+  { name: "Reading", href: "https://curius.app/ray-arayilakath" },
 ];
 ---
 
 <nav class="flex gap-3">
   {NAVIGATION.map((item) => (
-    <a href={item.href} class="text-lg leading-5.5 no-underline">{item.name}</a>
+    <Link href={item.href} class="text-lg leading-5.5">{item.name}</Link>
   ))}
 </nav>
