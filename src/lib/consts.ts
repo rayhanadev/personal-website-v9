@@ -10,69 +10,69 @@ export const EMAIL_ADDRESS = "me@rayhanadev.com";
 export const PHONE_NUMBER = "+1 (817) 470-7345";
 export const PHONE_NUMBER_RAW = "8174707345";
 export const SOCIALS = {
-	x: "https://x.com/rayhanadev",
-	github: "https://github.com/rayhanadev",
-	linkedin: "https://www.linkedin.com/in/rayhanadev",
+  x: "https://x.com/rayhanadev",
+  github: "https://github.com/rayhanadev",
+  linkedin: "https://www.linkedin.com/in/rayhanadev",
 };
 
 export const JSONLD = {
-	"@context": "http://www.schema.org",
-	"@type": "person",
-	address: {
-		"@type": "PostalAddress",
-		addressRegion: "California",
-		addressCountry: "United States of America",
-	},
-	alternateName: ALIAS,
-	affiliation: {
-		"@type": "Organization",
-		name: "Million Software, Inc.",
-		url: "https://million.dev",
-	},
-	birthDate: "2006-06-24",
-	description: "Developer",
-	disambiguatingDescription: "Software Engineer",
-	email: `mailto:${EMAIL_ADDRESS}`,
-	familyName: LAST_NAME,
-	gender: "Male",
-	givenName: FIRST_NAME,
-	honorificPrefix: "Mr",
-	image: "https://www.rayhanadev.com/headshot.png",
-	jobTitle: "Software Engineer",
-	name: FULL_NAME,
-	pronouns: "he/him",
-	sameAs: SOCIALS.x,
-	url: import.meta.env.SITE,
+  "@context": "http://www.schema.org",
+  "@type": "person",
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: "California",
+    addressCountry: "United States of America",
+  },
+  alternateName: ALIAS,
+  affiliation: {
+    "@type": "Organization",
+    name: "Million Software, Inc.",
+    url: "https://million.dev",
+  },
+  birthDate: "2006-06-24",
+  description: "Developer",
+  disambiguatingDescription: "Software Engineer",
+  email: `mailto:${EMAIL_ADDRESS}`,
+  familyName: LAST_NAME,
+  gender: "Male",
+  givenName: FIRST_NAME,
+  honorificPrefix: "Mr",
+  image: "https://www.rayhanadev.com/headshot.png",
+  jobTitle: "Software Engineer",
+  name: FULL_NAME,
+  pronouns: "he/him",
+  sameAs: SOCIALS.x,
+  url: import.meta.env.SITE,
 };
 
 export const DEFAULT_KEYWORDS = [
-	"ray",
-	"rayhan",
-	"noufal",
-	"arayilakath",
-	"rayhan noufal",
-	"rayhan arayilakath",
-	"rayhan noufal arayilakath",
-	"ray arayilakath",
-	"rayhanadev",
-	"furret",
-	"furret developer",
-	"furret.css",
-	"furret.dev",
-	"furret.codes",
-	"fullstack web",
-	"fullstack developer",
-	"fullstack",
-	"developer",
-	"software",
-	"software engineer",
-	"replit",
+  "ray",
+  "rayhan",
+  "noufal",
+  "arayilakath",
+  "rayhan noufal",
+  "rayhan arayilakath",
+  "rayhan noufal arayilakath",
+  "ray arayilakath",
+  "rayhanadev",
+  "furret",
+  "furret developer",
+  "furret.css",
+  "furret.dev",
+  "furret.codes",
+  "fullstack web",
+  "fullstack developer",
+  "fullstack",
+  "developer",
+  "software",
+  "software engineer",
+  "replit",
 ];
 
 export const NAVIGATION = [
-	{ name: "About", href: "/about" },
-	{ name: "Work", href: "/work" },
-	{ name: "Reading", href: "/reading" },
+  { name: "About", href: "/about" },
+  { name: "Work", href: "/work" },
+  { name: "Reading", href: "/reading" },
 ];
 
 export const GPG_PUBLIC_KEY = `-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -189,4 +189,4 @@ RA==
 -----END PGP PUBLIC KEY BLOCK-----`;
 
 export const SSH_PUBLIC_KEY =
-	"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFbtAqPlddx1IItiYbD1fZcztRw/v4vOLC9IKZfXcbqiAskitIK3XkM3N8gOEFwF7CtrTboB+RIZI72X/Es56bY5QtNLeTc6ENjW1g7v8xHf9hR+JqY1W3H/6/6v4CTVvQzrnqbmbzbBOQTdyOkHK7SrxDbaHlUu8jLQXEyFN7NYfH3QgGJcRpbEWzTmbjVT4ZyEyv2JVkv8OEPb6DCWXD8hn5+/54TdyXW79hoS8SZ4qT2J1lGPYtYE7gZO7vR+eKu7/mkfw5vQ8WghPZCmdnnFJWyhp8rQXTH/qeCZF0U2DG1OCaMeo5LrafmFjsgMAoc26BtN1uUa863MpUfHH9I+DoP5B4ImN1B39JS09rOGnBe9xMWpg2JQariILJjhT0rJgQOq2UpNBhQQd/FDCxZQcz0gDLM1sze4A6kTlzuxXmnjBSDzrzXDkuT8PgPapPRFMC/ffwr6czsgXCbiTZfoochU/NjjN6GrVBs0uvDvyqsAYV1/XMH9osK/FEt5RIlHYNvACCT7TX/vysZgCXfWN60OiQXnfvtzn+JY26sJqT5ZDj9KHIfgYE5SZiJIVFRNfv97IVqsM1HkgD/6fPJOo9gbljuj9Rxe0en70exQi7Iu2y19hGGkE9UJBHOCEejiLatuh7kKQFQQLvWXnUL9qNVylGJKKlAKpa+XnsJQ==";
+  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFbtAqPlddx1IItiYbD1fZcztRw/v4vOLC9IKZfXcbqiAskitIK3XkM3N8gOEFwF7CtrTboB+RIZI72X/Es56bY5QtNLeTc6ENjW1g7v8xHf9hR+JqY1W3H/6/6v4CTVvQzrnqbmbzbBOQTdyOkHK7SrxDbaHlUu8jLQXEyFN7NYfH3QgGJcRpbEWzTmbjVT4ZyEyv2JVkv8OEPb6DCWXD8hn5+/54TdyXW79hoS8SZ4qT2J1lGPYtYE7gZO7vR+eKu7/mkfw5vQ8WghPZCmdnnFJWyhp8rQXTH/qeCZF0U2DG1OCaMeo5LrafmFjsgMAoc26BtN1uUa863MpUfHH9I+DoP5B4ImN1B39JS09rOGnBe9xMWpg2JQariILJjhT0rJgQOq2UpNBhQQd/FDCxZQcz0gDLM1sze4A6kTlzuxXmnjBSDzrzXDkuT8PgPapPRFMC/ffwr6czsgXCbiTZfoochU/NjjN6GrVBs0uvDvyqsAYV1/XMH9osK/FEt5RIlHYNvACCT7TX/vysZgCXfWN60OiQXnfvtzn+JY26sJqT5ZDj9KHIfgYE5SZiJIVFRNfv97IVqsM1HkgD/6fPJOo9gbljuj9Rxe0en70exQi7Iu2y19hGGkE9UJBHOCEejiLatuh7kKQFQQLvWXnUL9qNVylGJKKlAKpa+XnsJQ==";
