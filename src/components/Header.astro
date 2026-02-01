@@ -18,12 +18,26 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
   <div class="flex flex-col items-end gap-4">
     <Link href="https://purduehackers.com" class="glider-link size-8.25 relative block" unstyled>
       {gliders.map((src, i) => (
-        <img src={src.src} alt="" draggable="false" loading={i === 3 ? "eager" : "lazy"} fetchpriority={i === 3 ? "high" : "low"} class:list={["glider-frame size-8.25 absolute inset-0", `frame-${i}`]} />
+        <img src={src.src} alt="" draggable="false" loading="eager" fetchpriority="high" class:list={["glider-frame size-8.25 absolute inset-0", `frame-${i}`]} />
       ))}
     </Link>
     <NavBar />
   </div>
 </header>
+
+<script>
+  const gliderLink = document.querySelector('.glider-link');
+  const frames = gliderLink?.querySelectorAll('.glider-frame');
+  if (frames?.length) {
+    Promise.all(
+      Array.from(frames).map(img => 
+        (img as HTMLImageElement).complete 
+          ? Promise.resolve() 
+          : new Promise(resolve => { img.addEventListener('load', resolve, { once: true }); })
+      )
+    ).then(() => gliderLink?.classList.add('loaded'));
+  }
+</script>
 
 <style>
   .glider-frame {
@@ -31,10 +45,11 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
     transition: opacity 350ms ease;
   }
 
-  .frame-3 { animation: frame3 2s steps(1) forwards; visibility: visible; }
-  .frame-2 { animation: frame2 2s steps(1) forwards; }
-  .frame-1 { animation: frame1 2s steps(1) forwards; }
-  .frame-0 { animation: frame0 2s steps(1) forwards; }
+  .frame-3 { visibility: visible; }
+  .glider-link.loaded .frame-3 { animation: frame3 2s steps(1) forwards; }
+  .glider-link.loaded .frame-2 { animation: frame2 2s steps(1) forwards; }
+  .glider-link.loaded .frame-1 { animation: frame1 2s steps(1) forwards; }
+  .glider-link.loaded .frame-0 { animation: frame0 2s steps(1) forwards; }
 
   @keyframes frame3 {
     0% { visibility: visible; }
