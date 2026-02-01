@@ -30,6 +30,11 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        external: ["react-grab"],
+      }
+    }
   },
   experimental: {
     clientPrerender: true,
