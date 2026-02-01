@@ -1,0 +1,141 @@
+---
+interface Props {
+  posts: { title: string; post_date: string; canonical_url: string }[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section class="w-184 flex flex-col gap-4 antialiased font-['General_Sans_Variable',system-ui,sans-serif]">
+  <h2 class="text-lg leading-[22px] font-semibold">Writings</h2>
+  <div class="writings-list relative flex flex-col">
+    <div class="writings-indicator"></div>
+    {posts.map((post) => (
+      <a
+        href={post.canonical_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="writings-row flex gap-6 w-fit"
+      >
+        <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px]">
+          {new Date(post.post_date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+        </span>
+        <span class="writings-title text-base leading-5 underline underline-offset-2 w-fit">
+          {post.title}
+        </span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .writings-list {
+    --indicator-y: 0;
+    --indicator-height: 0;
+    --indicator-width: 0;
+    --indicator-x: 0;
+  }
+
+  .writings-row {
+    position: relative;
+    z-index: 1;
+    padding: 4px 0;
+  }
+
+  .writings-title {
+    transition: color 200ms ease-out;
+  }
+
+  .writings-indicator {
+    position: absolute;
+    top: var(--indicator-y);
+    left: var(--indicator-x);
+    width: var(--indicator-width);
+    height: var(--indicator-height);
+    background-color: black;
+    border-radius: 2px;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--duration-hover) var(--ease-hover);
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .writings-list.active .writings-indicator {
+      transform: scaleY(1);
+      transition:
+        transform var(--duration-hover) var(--ease-hover),
+        top var(--duration-slide) var(--ease-slide),
+        left var(--duration-slide) var(--ease-slide),
+        width var(--duration-slide) var(--ease-slide),
+        height var(--duration-slide) var(--ease-slide);
+    }
+
+    .writings-list.active .writings-title.hovered {
+      color: white;
+      text-decoration: none;
+    }
+
+    .writings-row span:first-child {
+      transition: color 150ms ease-out;
+    }
+
+    .writings-row:hover span:first-child {
+      color: #4a4747;
+    }
+  }
+</style>
+
+<script>
+  function initWritings(): void {
+    const list = document.querySelector('.writings-list') as HTMLElement;
+    if (!list) return;
+
+    const indicator = list.querySelector('.writings-indicator') as HTMLElement;
+    const rows = list.querySelectorAll('.writings-row');
+    const titles = list.querySelectorAll('.writings-title');
+    let entryFromTop = false;
+
+    list.addEventListener('mouseenter', (e) => {
+      const rect = list.getBoundingClientRect();
+      entryFromTop = e.clientY < rect.top + rect.height / 2;
+    });
+
+    rows.forEach((row) => {
+      const title = row.querySelector('.writings-title') as HTMLElement;
+
+      row.addEventListener('mouseenter', () => {
+        const wasActive = list.classList.contains('active');
+        titles.forEach(t => t.classList.remove('hovered'));
+        title.classList.add('hovered');
+
+        const listRect = list.getBoundingClientRect();
+        const titleRect = title.getBoundingClientRect();
+        list.style.setProperty('--indicator-y', `${titleRect.top - listRect.top}px`);
+        list.style.setProperty('--indicator-height', `${titleRect.height}px`);
+        list.style.setProperty('--indicator-x', `${titleRect.left - listRect.left - 4}px`);
+        list.style.setProperty('--indicator-width', `${titleRect.width + 8}px`);
+
+        if (!wasActive) {
+          indicator.style.transition = 'none';
+          indicator.style.transformOrigin = entryFromTop ? 'top' : 'bottom';
+          void indicator.offsetHeight;
+          indicator.style.transition = '';
+          list.classList.add('active');
+        }
+      });
+    });
+
+    list.addEventListener('mouseleave', (e) => {
+      const rect = list.getBoundingClientRect();
+      const exitedUp = e.clientY < rect.top + rect.height / 2;
+      indicator.style.transformOrigin = exitedUp ? 'top' : 'bottom';
+      list.classList.remove('active');
+      titles.forEach(t => t.classList.remove('hovered'));
+    });
+  }
+
+  initWritings();
+  document.addEventListener('astro:page-load', initWritings);
+</script>
