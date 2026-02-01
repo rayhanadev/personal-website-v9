@@ -1,4 +1,6 @@
 ---
+import Analytics from '@vercel/analytics/astro'
+import SpeedInsights from "@vercel/speed-insights/astro";
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 
@@ -41,6 +43,8 @@ export interface Props {
             href="https://rayhanadev.substack.com/feed"
         />
 
+        <Analytics />
+        <SpeedInsights />
         <ClientRouter />
     </head>
     <body class="flex flex-col h-dvh w-full">
