@@ -1,14 +1,29 @@
 {
-  "name": "",
+  "name": "@rayhanadev/website-v9",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Hello world!",
   "type": "module",
-  "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "lint": "astro check && oxlint",
+    "format": "oxfmt",
+    "build": "astro build"
   },
   "dependencies": {
-    "astro": "^5.17.1"
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/vercel": "^9.0.4",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.17.1",
+    "astro-capo": "^0.0.1",
+    "astro-seo": "^1.1.0",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.27.0",
+    "oxlint": "^1.42.0",
+    "oxlint-tsgolint": "^0.11.4"
   }
 }

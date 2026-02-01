@@ -1,0 +1,49 @@
+---
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+
+import Favicons from "../components/Favicons.astro";
+import SEO from "../components/SEO.astro";
+
+import "../styles/global.css";
+
+const { title, description, keywords } = Astro.props;
+
+export interface Props {
+  title: string;
+  description: string;
+  keywords?: string[];
+}
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <Font cssVariable="--font-general-sans" preload />
+
+        <Favicons />
+        <SEO title={title} description={description} keywords={keywords} />
+
+        <meta
+            name="robots"
+            content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"
+        />
+
+        <link rel="sitemap" href="/sitemap-index.xml" />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Ray's Substack"
+            href="https://rayhanadev.substack.com/feed"
+        />
+
+        <ClientRouter />
+    </head>
+    <body class="flex flex-col h-dvh w-full">
+        <slot />
+    </body>
+</html>

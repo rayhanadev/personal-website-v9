@@ -1,0 +1,65 @@
+---
+import { SEO as AstroSEO } from "astro-seo";
+
+import { EMAIL_ADDRESS, FULL_NAME, JSONLD, DEFAULT_KEYWORDS } from "../lib/consts";
+
+const { title, description, keywords = [] } = Astro.props;
+
+export interface Props {
+  title: string;
+  description: string;
+  keywords?: string[];
+}
+---
+
+<>
+    <script
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify(JSONLD)}
+    />
+
+    <meta
+        name="robots"
+        content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"
+    />
+
+    <AstroSEO
+        title={title}
+        description={description}
+        canonical={import.meta.env.SITE}
+        openGraph={{
+            basic: {
+                type: "website",
+                title: title,
+                image: `${import.meta.env.SITE}/opengraph.png`,
+            },
+            optional: {
+                description: description,
+                locale: "en-US",
+                siteName: "rayhanadev.com",
+            },
+            image: {
+                alt: "Cover image, with the text: Ray Arayilakath. President at Purdue Hackers.",
+                type: "image/png",
+            },
+        }}
+        twitter={{
+            title: title,
+            description: description,
+            image: `${import.meta.env.SITE}/twitter.png`,
+            imageAlt:
+                "Cover image, with the text: Ray Arayilakath. President at Purdue Hackers.",
+            card: "summary_large_image",
+            site: "rayhanadev",
+            creator: "rayhanadev",
+        }}
+    />
+
+    <meta name="author" content={`${FULL_NAME}, ${EMAIL_ADDRESS}`} />
+    <link rel="me" href="https://hachyderm.io/@rayhanadev" />
+    <meta
+        name="keywords"
+        content={[...DEFAULT_KEYWORDS, ...keywords].join(", ")}
+    />
+</>

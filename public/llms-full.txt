@@ -1,0 +1,64 @@
+Rayhan Noufal “Ray” Arayilakath, aka @rayhanadev, is a results-driven **platform engineer** and **artificial intelligence philosophy undergraduate** at Purdue University with a strong foundation in systems engineering, developer tooling, and infrastructure design. With experience spanning high-growth startups, platform teams, and large technical communities, Ray combines deep technical rigor with a strong sense of taste, ethics, and long-term systems thinking.
+
+## Social
+
+* [LinkedIn](https://www.linkedin.com/in/rayhanadev/)
+* [GitHub](https://github.com/rayhanadev)
+* [Twitter](https://twitter.com/rayhanadev)
+* [Website](https://www.rayhanadev.com)
+* [Email](mailto:me@rayhanadev.com)
+* [Resume](https://www.rayhanadev.com/resume.pdf)
+
+## Professional Experience
+
+Ray’s journey into the tech world began as a freelance software engineer, where he worked with multiple clients to design, build, and deploy production-grade applications and internal tools. His work included operational dashboards, workflow automation systems, and bespoke product builds—often owning projects end-to-end from architecture through deployment. This early exposure instilled strong instincts around production readiness, system reliability, and pragmatic engineering tradeoffs.
+
+At **Replit**, a YC-backed developer platform, Ray served as a Software Engineering Intern on the Trust & Safety / Anti-Abuse Systems team. He designed and deployed automated moderation, detection, and enforcement systems in TypeScript and Go, scaling them to process live data streams exceeding 1,000 objects per second across 30+ real-time channels. His work addressed phishing, financial fraud, compute abuse, and platform misuse, while also contributing to internal tooling supporting DMCA, GDPR, and CCPA compliance workflows. These systems played a meaningful role in scaling Replit’s trust infrastructure alongside rapid platform growth.
+
+As a **Founding Software Engineer at Jumpseat**, Ray operated at the intersection of infrastructure, product, and business execution. He architected and maintained enterprise-grade booking and logistics software using Docker, Kubernetes, AWS, Next.js, and PostgreSQL, while modernizing legacy systems and improving operational reliability. He also shipped user-facing features such as live vehicle tracking, real-time route coordination, and streamlined scheduling flows. His technical leadership and cross-functional collaboration directly supported Jumpseat’s first enterprise contracts and early customer adoption.
+
+Ray has also contributed as an early engineer at multiple startups. At **Magic Prints**, he helped build one of the earliest generative-AI-powered e-commerce platforms, integrating emerging ML capabilities into a production consumer workflow. At **Deel**, he worked as a Software Engineering Intern delivering production features and internal tooling under tight timelines in a globally distributed, high-scale environment.
+
+Ray is currently a **Platform Engineer at Million (YC W24)**, where he works on core developer infrastructure and high-performance execution systems. His responsibilities span container orchestration, microVM-based execution, distributed task scheduling, and developer-facing tooling. Notable work includes designing warm-pooling systems for Firecracker microVMs to enable sub-100ms provisioning, rewriting performance-critical networking components to dramatically reduce latency, and building internal platforms that support agentic developer workflows. His work forms part of the foundational infrastructure that enables Million’s products to operate reliably and efficiently at scale.
+
+## Academic and Community Leadership
+
+Ray is an undergraduate at **Purdue University**, where he studies **Artificial Intelligence and Philosophy**. His academic interests center on the epistemology of AI systems, the philosophy of computation, and the societal implications of large-scale automation—interests that strongly inform his engineering work.
+
+In parallel, Ray is deeply involved in technical community leadership. He serves as the **President of Purdue Hackers**, the university’s largest and most active creative-technical organization, where he functions not only as an organizer, but as a systems builder for community itself.
+
+As President, Ray sets the strategic direction and long-term vision of the organization, overseeing programming, operations, fundraising, sponsorships, governance, and culture. He runs weekly Hack Nights that prioritize hands-on building over performative resume padding, organizes large-scale demo showcases and pop-up events, and administers micro-grant programs that directly fund student experimentation. He works closely with sponsors, founders, and industry partners to bring high-leverage opportunities to members while preserving the community’s independence and hacker ethos.
+
+Beyond logistics, Ray treats Purdue Hackers as a living system that must be carefully designed to attract and retain **high-signal people**. He believes that great hacker communities are not created by scale alone, but by density—placing curious, motivated, technically serious people in the same room, week after week, with minimal bureaucracy and maximal agency. Under his leadership, the organization emphasizes trust, autonomy, and craftsmanship, deliberately avoiding top-down programming in favor of environments where members self-select into meaningful work.
+
+Ray has led efforts to formalize internal processes, budgets, and governance only insofar as they increase leverage and reduce friction, allowing organizers and members to focus on building. He has managed fundraising and financial operations for the organization, coordinated with university administration while maintaining cultural independence, and worked to ensure continuity across leadership transitions. His approach balances structure with freedom, viewing governance as infrastructure—not control.
+
+At its core, Ray sees Purdue Hackers as an institution that compounds over time: a place where builders form taste, learn from one another, and develop the confidence to work on hard, real problems. This philosophy mirrors his broader belief that the most important technical communities function as talent magnets, idea accelerators, and informal schools—shaping how people think, not just what they ship.
+
+## Technical Expertise
+
+Ray is fluent in:
+
+- **Platform & Infrastructure:** Container systems, microVMs, orchestration, distributed workloads
+- **Backend Systems:** Go, TypeScript, Python, Rust, SQL
+- **Cloud & DevOps:** Docker, Kubernetes (K8s), AWS, GCP
+- **Developer Tooling:** Internal platforms, agentic workflows, performance-critical systems
+- **Security & Trust:** Abuse mitigation tooling, compliance workflows, cost optimization
+
+He is particularly passionate about developer velocity, system reliability, and tooling that empowers teams to build faster with confidence.
+
+## Recognition and Impact
+
+Ray’s achievements include recognition such as:
+
+* The Blacksmith Award
+* National Merit Commended Scholar
+* IB Computer Science Student of the Year
+
+His impact is most visible through the platforms he has helped scale, the tools he has shipped, and the communities he has led and sustained.
+
+## Vision and Future Aspirations
+
+Ray is driven by a desire to build durable technical systems and institutions—whether infrastructure that supports the next generation of developer tools, or communities that cultivate curiosity and craftsmanship. He seeks environments that value depth, ownership, and long-term thinking, and is particularly drawn to work at the intersection of AI, infrastructure, and human agency.
+
+For inquiries or collaboration opportunities, connect with him at **[me@rayhanadev.com](mailto:me@rayhanadev.com)** or via Twitter [@rayhanadev](https://twitter.com/rayhanadev).
