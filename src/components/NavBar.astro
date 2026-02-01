@@ -92,8 +92,10 @@ const NAVIGATION = [
 
   let entryEdge: Edge = 'bottom';
 
+  const HORIZONTAL_BIAS = 1.75;
+
   nav.addEventListener('mouseenter', (e) => {
-    entryEdge = getEdge(e, nav.getBoundingClientRect());
+    entryEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
   });
 
   links.forEach((link) => {
@@ -119,7 +121,7 @@ const NAVIGATION = [
   });
 
   nav.addEventListener('mouseleave', (e) => {
-    const exitEdge = getEdge(e, nav.getBoundingClientRect());
+    const exitEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
     applyEdge(exitEdge);
     indicator.classList.toggle('exit-slow', exitEdge === 'top');
     nav.classList.remove('active');

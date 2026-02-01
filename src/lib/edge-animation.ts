@@ -1,9 +1,9 @@
 export type Edge = 'top' | 'bottom' | 'left' | 'right';
 
-export function getEdge(e: MouseEvent, rect: DOMRect): Edge {
+export function getEdge(e: MouseEvent, rect: DOMRect, horizontalBias = 1): Edge {
   const distances = {
-    top: Math.abs(e.clientY - rect.top),
-    bottom: Math.abs(e.clientY - rect.bottom),
+    top: Math.abs(e.clientY - rect.top) * horizontalBias,
+    bottom: Math.abs(e.clientY - rect.bottom) * horizontalBias,
     left: Math.abs(e.clientX - rect.left),
     right: Math.abs(e.clientX - rect.right),
   };
