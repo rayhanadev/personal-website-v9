@@ -4,4 +4,10 @@
   --font-sans:
     var(--font-general-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --duration-hover: 150ms;
+  --duration-hover-slow: 250ms;
+  --duration-slide: 280ms;
+  --ease-hover: ease-in-out;
+  --ease-slide: cubic-bezier(0.22, 1, 0.36, 1);
 }

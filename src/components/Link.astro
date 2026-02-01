@@ -24,6 +24,8 @@ const linkClass = unstyled ? className : ["link", className];
 
 <style>
   .link {
+    --origin: bottom;
+    --scale: scaleY(0);
     position: relative;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -39,20 +41,62 @@ const linkClass = unstyled ? className : ["link", className];
     inset: 0;
     background-color: black;
     border-radius: 2px;
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform 200ms ease-out;
+    transform: var(--scale);
+    transform-origin: var(--origin);
+    transition: transform var(--duration-hover) var(--ease-hover);
     z-index: -1;
+    will-change: transform;
+  }
+
+  .link.no-transition::before {
+    transition: none;
+  }
+
+  .link.exit-slow::before {
+    transition: transform var(--duration-hover-slow) var(--ease-hover);
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .link:hover {
+    .link.active {
       color: white;
       text-decoration: none;
     }
 
-    .link:hover::before {
-      transform: scaleY(1);
+    .link.active::before {
+      transform: scale(1);
     }
   }
 </style>
+
+<script>
+  import { getEdge, getScaleTransform, type Edge } from '../lib/edge-animation';
+
+  function applyEdge(link: HTMLElement, edge: Edge): void {
+    link.style.setProperty('--origin', edge);
+    link.style.setProperty('--scale', getScaleTransform(edge));
+  }
+
+  function initLinks(): void {
+    document.querySelectorAll<HTMLElement>('.link').forEach((link) => {
+      link.addEventListener('mouseenter', (e) => {
+        const edge = getEdge(e, link.getBoundingClientRect());
+        link.classList.add('no-transition');
+        link.classList.remove('exit-slow', 'active');
+        applyEdge(link, edge);
+        void link.offsetHeight;
+        link.classList.remove('no-transition');
+        link.classList.add('active');
+      });
+
+      link.addEventListener('mouseleave', (e) => {
+        const edge = getEdge(e, link.getBoundingClientRect());
+        applyEdge(link, edge);
+        link.classList.toggle('exit-slow', edge === 'top');
+        link.classList.remove('active');
+      });
+    });
+  }
+
+  initLinks();
+  document.addEventListener('astro:page-load', initLinks);
+</script>

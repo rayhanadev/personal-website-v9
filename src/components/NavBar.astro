@@ -1,6 +1,4 @@
 ---
-import Link from "./Link.astro";
-
 const NAVIGATION = [
   { name: "About", href: "/about" },
   { name: "Work", href: "/work" },
@@ -8,8 +6,123 @@ const NAVIGATION = [
 ];
 ---
 
-<nav class="flex gap-3">
+<nav class="nav-bar relative flex gap-3">
+  <div class="nav-indicator"></div>
   {NAVIGATION.map((item) => (
-    <Link href={item.href} class="text-lg leading-5.5">{item.name}</Link>
+    <a
+      href={item.href}
+      target={item.href.startsWith("http") ? "_blank" : undefined}
+      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+      class="nav-link text-lg leading-5.5"
+    >{item.name}</a>
   ))}
 </nav>
+
+<style>
+  .nav-bar {
+    --indicator-x: 0;
+    --indicator-width: 0;
+  }
+
+  .nav-link {
+    position: relative;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 2px 4px;
+    border-radius: 2px;
+    transition: color 200ms ease-out;
+    z-index: 1;
+  }
+
+  .nav-indicator {
+    position: absolute;
+    top: 0;
+    left: var(--indicator-x);
+    width: var(--indicator-width);
+    height: 100%;
+    background-color: black;
+    border-radius: 2px;
+    transform: scale(0);
+    transform-origin: bottom;
+    transition: transform var(--duration-hover) var(--ease-hover);
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .nav-indicator.scale-y {
+    transform: scaleY(0);
+  }
+
+  .nav-indicator.scale-x {
+    transform: scaleX(0);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-bar.active .nav-indicator {
+      transform: scale(1);
+      transition:
+        transform var(--duration-hover) var(--ease-hover),
+        left var(--duration-slide) var(--ease-slide),
+        width var(--duration-slide) var(--ease-slide);
+    }
+
+    .nav-indicator.exit-slow {
+      transition: transform var(--duration-hover-slow) var(--ease-hover);
+    }
+
+    .nav-bar.active .nav-link.hovered {
+      color: white;
+      text-decoration: none;
+    }
+  }
+</style>
+
+<script>
+  import { getEdge, isHorizontal, type Edge } from '../lib/edge-animation';
+
+  const nav = document.querySelector('.nav-bar') as HTMLElement;
+  const indicator = document.querySelector('.nav-indicator') as HTMLElement;
+  const links = document.querySelectorAll('.nav-link');
+
+  function applyEdge(edge: Edge): void {
+    indicator.style.transformOrigin = edge;
+    indicator.classList.toggle('scale-x', isHorizontal(edge));
+    indicator.classList.toggle('scale-y', !isHorizontal(edge));
+  }
+
+  let entryEdge: Edge = 'bottom';
+
+  nav.addEventListener('mouseenter', (e) => {
+    entryEdge = getEdge(e, nav.getBoundingClientRect());
+  });
+
+  links.forEach((link) => {
+    link.addEventListener('mouseenter', () => {
+      const wasActive = nav.classList.contains('active');
+      links.forEach(l => l.classList.remove('hovered'));
+      link.classList.add('hovered');
+
+      const navRect = nav.getBoundingClientRect();
+      const linkRect = link.getBoundingClientRect();
+      nav.style.setProperty('--indicator-x', `${linkRect.left - navRect.left}px`);
+      nav.style.setProperty('--indicator-width', `${linkRect.width}px`);
+
+      if (!wasActive) {
+        indicator.style.transition = 'none';
+        indicator.classList.remove('exit-slow');
+        applyEdge(entryEdge);
+        void indicator.offsetHeight;
+        indicator.style.transition = '';
+        nav.classList.add('active');
+      }
+    });
+  });
+
+  nav.addEventListener('mouseleave', (e) => {
+    const exitEdge = getEdge(e, nav.getBoundingClientRect());
+    applyEdge(exitEdge);
+    indicator.classList.toggle('exit-slow', exitEdge === 'top');
+    nav.classList.remove('active');
+    links.forEach(l => l.classList.remove('hovered'));
+  });
+</script>
