@@ -1,0 +1,76 @@
+---
+import NavBar from "./NavBar.astro";
+
+import Glider0 from "../assets/gliders/Glider0.svg";
+import Glider1 from "../assets/gliders/Glider1.svg";
+import Glider2 from "../assets/gliders/Glider2.svg";
+import Glider3 from "../assets/gliders/Glider3.svg";
+
+const gliders = [Glider0, Glider1, Glider2, Glider3];
+---
+
+<header class="w-184 flex justify-between items-start antialiased font-['General_Sans_Variable',system-ui,sans-serif]">
+  <div class="flex flex-col gap-4">
+    <h1 class="text-[28px] leading-8.5 font-semibold">Ray Arayilakath</h1>
+    <p class="text-lg leading-5.5">@rayhanadev • Platform Engineer at Million</p>
+  </div>
+  <div class="flex flex-col items-end gap-4">
+    <a href="https://purduehackers.com" target="_blank" rel="noopener noreferrer" class="glider-link size-8.25 relative block">
+      {gliders.map((src, i) => (
+        <img src={src.src} alt="" draggable="false" class:list={["glider-frame size-8.25 absolute inset-0", `frame-${i}`]} />
+      ))}
+    </a>
+    <NavBar />
+  </div>
+</header>
+
+<style>
+  .glider-frame {
+    visibility: hidden;
+    transition: opacity 350ms ease;
+  }
+
+  .frame-3 { animation: frame3 2s steps(1) forwards; visibility: visible; }
+  .frame-2 { animation: frame2 2s steps(1) forwards; }
+  .frame-1 { animation: frame1 2s steps(1) forwards; }
+  .frame-0 { animation: frame0 2s steps(1) forwards; }
+
+  @keyframes frame3 {
+    0% { visibility: visible; }
+    25%, 100% { visibility: hidden; }
+  }
+  @keyframes frame2 {
+    0%, 24.9% { visibility: hidden; }
+    25% { visibility: visible; }
+    50% { visibility: hidden; }
+  }
+  @keyframes frame1 {
+    0%, 49.9% { visibility: hidden; }
+    50% { visibility: visible; }
+    75% { visibility: hidden; }
+  }
+  @keyframes frame0 {
+    0%, 74.9% { visibility: hidden; }
+    75%, 100% { visibility: visible; }
+  }
+
+  .glider-link:hover img { opacity: 0; }
+
+  .glider-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: #fbbf24;
+    opacity: 0;
+    transition: opacity 350ms ease;
+    mask: url("/src/assets/gliders/Glider0.svg") center / contain no-repeat;
+    -webkit-mask: url("/src/assets/gliders/Glider0.svg") center / contain no-repeat;
+  }
+
+  .glider-link:hover::after { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glider-frame { animation: none; }
+    .frame-0 { visibility: visible; }
+  }
+</style>
