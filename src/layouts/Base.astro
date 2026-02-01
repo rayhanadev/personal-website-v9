@@ -48,7 +48,9 @@ export interface Props {
         <ClientRouter />
 
         <script>
-            import("react-grab");
+            if (import.meta.env.DEV) {
+                import("react-grab");
+            }
         </script>
     </head>
     <body class="flex flex-col h-dvh w-full antialiased">
