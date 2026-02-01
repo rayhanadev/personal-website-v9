@@ -69,12 +69,6 @@ export const DEFAULT_KEYWORDS = [
   "replit",
 ];
 
-export const NAVIGATION = [
-  { name: "About", href: "/about" },
-  { name: "Work", href: "/work" },
-  { name: "Reading", href: "/reading" },
-];
-
 export const GPG_PUBLIC_KEY = `-----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: 97C7 04C7 6B26 82EB F511  03A5 7A5E 74BF 31C9 B144
 Comment: Rayhan Noufal Arayilakath <me@rayhanadev.com>
