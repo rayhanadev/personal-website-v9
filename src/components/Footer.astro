@@ -24,7 +24,7 @@ function getWebringUrl(type: "previous" | "main" | "next"): string {
 const commitSha = import.meta.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev";
 ---
 
-<footer class="w-184 flex justify-between items-end font-sans mt-auto">
+<footer class="w-184 flex justify-between items-end font-sans mt-auto relative z-10">
   <div class="flex flex-col justify-center items-start gap-2">
     <div class="flex items-end gap-0.5 text-base leading-5">
       <span>PH: (</span>
