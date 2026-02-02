@@ -3,6 +3,7 @@ import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
+import { Head } from "astro-capo";
 
 import Favicons from "../components/Favicons.astro";
 import SEO from "../components/SEO.astro";
@@ -22,7 +23,7 @@ const { title, description, keywords } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-    <head>
+    <Head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -54,7 +55,7 @@ const { title, description, keywords } = Astro.props;
                 import("react-grab");
             }
         </script>
-    </head>
+    </Head>
     <body class="flex flex-col h-dvh w-full antialiased">
         <main class="flex flex-col items-center flex-1 pt-20 pb-10">
             <Header transition:persist />
