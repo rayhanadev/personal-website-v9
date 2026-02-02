@@ -1,0 +1,166 @@
+---
+import Layout from "../layouts/Base.astro";
+
+interface CuriusLink {
+  id: number;
+  link: string;
+  title: string;
+  modifiedDate: string;
+}
+
+interface CuriusResponse {
+  library: CuriusLink[];
+}
+
+const response = await fetch("https://curius.app/api/library?user=ray-arayilakath");
+const data: CuriusResponse = await response.json();
+const readings = data.library;
+---
+
+<Layout
+  title="Readings - Ray Arayilakath"
+  description="Links and articles saved by Ray Arayilakath."
+>
+  <section class="w-184 flex flex-col gap-4 font-sans">
+    <h2 class="text-[20px] leading-[22px] font-semibold">Readings</h2>
+    <div class="readings-list relative flex flex-col">
+      <div class="readings-indicator absolute bg-black rounded-sm pointer-events-none will-change-transform"></div>
+      {readings.map((item) => (
+        <a
+          href={item.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="readings-row relative z-1 py-1 outline-none flex gap-6 w-fit"
+        >
+          <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px] transition-colors duration-150 ease-out">
+            {new Date(item.modifiedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+          </span>
+          <span class="readings-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit transition-colors duration-200 ease-out">
+            {item.title}
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .readings-indicator {
+    top: var(--indicator-y, 0);
+    left: var(--indicator-x, 0);
+    width: var(--indicator-width, 0);
+    height: var(--indicator-height, 0);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--duration-hover) var(--ease-hover);
+  }
+
+  .readings-list.active .readings-indicator {
+    transform: scaleY(1);
+    transition:
+      transform var(--duration-hover) var(--ease-hover),
+      top var(--duration-slide) var(--ease-slide),
+      left var(--duration-slide) var(--ease-slide),
+      width var(--duration-slide) var(--ease-slide),
+      height var(--duration-slide) var(--ease-slide);
+  }
+
+  .readings-list.active .readings-title.hovered {
+    color: white;
+    text-decoration: none;
+  }
+
+  .readings-row:hover span:first-child,
+  .readings-row:focus span:first-child {
+    color: #4a4747;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .readings-title { transition: none; }
+    .readings-row:hover .readings-title,
+    .readings-row:focus .readings-title { text-decoration-color: black; }
+    .readings-indicator { display: none; }
+    .readings-list.active .readings-title.hovered { color: inherit; text-decoration: underline; text-decoration-color: black; }
+    .readings-row span:first-child { transition: none; }
+  }
+</style>
+
+<script>
+  let tabDirection: 'forward' | 'backward' = 'forward';
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      tabDirection = e.shiftKey ? 'backward' : 'forward';
+    }
+  });
+
+  function initReadings(): void {
+    const list = document.querySelector('.readings-list') as HTMLElement;
+    if (!list) return;
+
+    const indicator = list.querySelector('.readings-indicator') as HTMLElement;
+    const rows = list.querySelectorAll('.readings-row');
+    const titles = list.querySelectorAll('.readings-title');
+    let entryFromTop = false;
+
+    list.addEventListener('mouseenter', (e) => {
+      const rect = list.getBoundingClientRect();
+      entryFromTop = e.clientY < rect.top + rect.height / 2;
+    });
+
+    function activateRow(title: HTMLElement, isKeyboard: boolean = false): void {
+      const wasActive = list.classList.contains('active');
+      titles.forEach(t => t.classList.remove('hovered'));
+      title.classList.add('hovered');
+
+      const listRect = list.getBoundingClientRect();
+      const titleRect = title.getBoundingClientRect();
+      list.style.setProperty('--indicator-y', `${titleRect.top - listRect.top}px`);
+      list.style.setProperty('--indicator-height', `${titleRect.height}px`);
+      list.style.setProperty('--indicator-x', `${titleRect.left - listRect.left - 4}px`);
+      list.style.setProperty('--indicator-width', `${titleRect.width + 8}px`);
+
+      if (!wasActive) {
+        indicator.style.transition = 'none';
+        const origin = isKeyboard
+          ? (tabDirection === 'forward' ? 'top' : 'bottom')
+          : (entryFromTop ? 'top' : 'bottom');
+        indicator.style.transformOrigin = origin;
+        void indicator.offsetHeight;
+        indicator.style.transition = '';
+        list.classList.add('active');
+      }
+    }
+
+    rows.forEach((row) => {
+      const title = row.querySelector('.readings-title') as HTMLElement;
+
+      row.addEventListener('mouseenter', () => activateRow(title, false));
+
+      row.addEventListener('focus', () => activateRow(title, true));
+    });
+
+    function deactivate(exitOrigin: string): void {
+      indicator.style.transformOrigin = exitOrigin;
+      list.classList.remove('active');
+      titles.forEach(t => t.classList.remove('hovered'));
+    }
+
+    list.addEventListener('mouseleave', (e) => {
+      const rect = list.getBoundingClientRect();
+      const exitedUp = e.clientY < rect.top + rect.height / 2;
+      deactivate(exitedUp ? 'top' : 'bottom');
+    });
+
+    list.addEventListener('focusout', (e) => {
+      const relatedTarget = (e as FocusEvent).relatedTarget as Element | null;
+      if (!relatedTarget || !list.contains(relatedTarget)) {
+        const exitOrigin = tabDirection === 'forward' ? 'bottom' : 'top';
+        deactivate(exitOrigin);
+      }
+    });
+  }
+
+  initReadings();
+  document.addEventListener('astro:page-load', initReadings);
+</script>
