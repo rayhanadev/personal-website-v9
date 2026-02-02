@@ -18,7 +18,7 @@ const posts: SubstackPost[] = await response.json();
         href={post.canonical_url}
         target="_blank"
         rel="noopener noreferrer"
-        class="writings-row relative z-1 py-1 outline-none flex gap-6 w-fit"
+        class="writings-row relative z-1 py-1 outline-none flex gap-6 w-full"
       >
         <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px] transition-colors duration-150 ease-out">
           {new Date(post.post_date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
