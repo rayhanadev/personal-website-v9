@@ -7,42 +7,24 @@ const NAVIGATION = [
 ---
 
 <nav class="nav-bar relative flex gap-3 mr-[-5.5px]">
-  <div class="nav-indicator"></div>
+  <div class="nav-indicator absolute inset-y-0 bg-black rounded-sm pointer-events-none"></div>
   {NAVIGATION.map((item) => (
     <a
       href={item.href}
       target={item.href.startsWith("http") ? "_blank" : undefined}
       rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-      class="nav-link text-base leading-5"
-      style="cursor: pointer;"
+      class="nav-link relative underline underline-offset-2 decoration-[#ccc] px-1 py-0.5 rounded-sm outline-none transition-colors duration-200 ease-out z-1 cursor-pointer text-base leading-5"
     >{item.name}</a>
   ))}
 </nav>
 
 <style>
-  .nav-link {
-    position: relative;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    text-decoration-color: #ccc;
-    padding: 2px 4px;
-    border-radius: 2px;
-    outline: none;
-    transition: color 200ms ease-out;
-    z-index: 1;
-  }
-
   .nav-indicator {
-    position: absolute;
-    inset-block: 0;
     left: var(--indicator-x, 0);
     width: var(--indicator-width, 0);
-    background-color: black;
-    border-radius: 2px;
     transform: scale(0);
     transform-origin: bottom;
     transition: transform var(--duration-hover) var(--ease-hover);
-    pointer-events: none;
   }
 
   .nav-indicator.scale-y { transform: scaleY(0); }
@@ -60,7 +42,7 @@ const NAVIGATION = [
   .nav-bar.active .nav-link.hovered { color: white; text-decoration: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .nav-link { text-decoration-color: #ccc; transition: none; }
+    .nav-link { transition: none; }
     .nav-link:hover, .nav-link:focus { text-decoration-color: black; }
     .nav-indicator { display: none; }
     .nav-bar.active .nav-link.hovered { color: inherit; text-decoration: underline; text-decoration-color: black; }

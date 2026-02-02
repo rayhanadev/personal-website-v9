@@ -9,30 +9,15 @@ interface Props {
 const { href, class: className, unstyled = false, ...rest } = Astro.props;
 
 const isExternal = href.startsWith("http://") || href.startsWith("https://");
-const linkClass = unstyled ? className : ["link", className];
+const linkClass = unstyled ? className : ["underline underline-offset-2 decoration-[#ccc] outline-none transition-[text-decoration-color] duration-200 ease-out hover:decoration-black focus:decoration-black cursor-pointer", className];
 ---
 
 {isExternal ? (
-  <a href={href} target="_blank" rel="noopener noreferrer" class:list={linkClass} style="cursor: pointer;" {...rest}>
+  <a href={href} target="_blank" rel="noopener noreferrer" class:list={linkClass} {...rest}>
     <slot />
   </a>
 ) : (
-  <a href={href} class:list={linkClass} style="cursor: pointer;" {...rest}>
+  <a href={href} class:list={linkClass} {...rest}>
     <slot />
   </a>
 )}
-
-<style>
-  .link {
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    text-decoration-color: #ccc;
-    outline: none;
-    transition: text-decoration-color 200ms ease-out;
-  }
-
-  .link:hover,
-  .link:focus {
-    text-decoration-color: black;
-  }
-</style>

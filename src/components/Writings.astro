@@ -9,18 +9,18 @@ const { posts } = Astro.props;
 <section class="w-184 flex flex-col gap-4 font-sans">
   <h2 class="text-[20px] leading-[22px] font-semibold">Writings</h2>
   <div class="writings-list relative flex flex-col">
-    <div class="writings-indicator"></div>
+    <div class="writings-indicator absolute bg-black rounded-sm pointer-events-none will-change-transform"></div>
     {posts.map((post) => (
       <a
         href={post.canonical_url}
         target="_blank"
         rel="noopener noreferrer"
-        class="writings-row flex gap-6 w-fit"
+        class="writings-row relative z-1 py-1 outline-none flex gap-6 w-fit"
       >
-        <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px]">
+        <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px] transition-colors duration-150 ease-out">
           {new Date(post.post_date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
         </span>
-        <span class="writings-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit">
+        <span class="writings-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit transition-colors duration-200 ease-out">
           {post.title}
         </span>
       </a>
@@ -29,37 +29,14 @@ const { posts } = Astro.props;
 </section>
 
 <style>
-  .writings-list {
-    --indicator-y: 0;
-    --indicator-height: 0;
-    --indicator-width: 0;
-    --indicator-x: 0;
-  }
-
-  .writings-row {
-    position: relative;
-    z-index: 1;
-    padding: 4px 0;
-    outline: none;
-  }
-
-  .writings-title {
-    transition: color 200ms ease-out;
-  }
-
   .writings-indicator {
-    position: absolute;
-    top: var(--indicator-y);
-    left: var(--indicator-x);
-    width: var(--indicator-width);
-    height: var(--indicator-height);
-    background-color: black;
-    border-radius: 2px;
+    top: var(--indicator-y, 0);
+    left: var(--indicator-x, 0);
+    width: var(--indicator-width, 0);
+    height: var(--indicator-height, 0);
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform var(--duration-hover) var(--ease-hover);
-    pointer-events: none;
-    will-change: transform;
   }
 
   .writings-list.active .writings-indicator {
@@ -77,40 +54,18 @@ const { posts } = Astro.props;
     text-decoration: none;
   }
 
-  .writings-row span:first-child {
-    transition: color 150ms ease-out;
-  }
-
   .writings-row:hover span:first-child,
-  .writings-row:focus span:first-child,
-  .writings-row:focus-visible span:first-child {
+  .writings-row:focus span:first-child {
     color: #4a4747;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .writings-title {
-      text-decoration-color: #ccc;
-      transition: none;
-    }
-
+    .writings-title { transition: none; }
     .writings-row:hover .writings-title,
-    .writings-row:focus .writings-title {
-      text-decoration-color: black;
-    }
-
-    .writings-indicator {
-      display: none;
-    }
-
-    .writings-list.active .writings-title.hovered {
-      color: inherit;
-      text-decoration: underline;
-      text-decoration-color: black;
-    }
-
-    .writings-row span:first-child {
-      transition: none;
-    }
+    .writings-row:focus .writings-title { text-decoration-color: black; }
+    .writings-indicator { display: none; }
+    .writings-list.active .writings-title.hovered { color: inherit; text-decoration: underline; text-decoration-color: black; }
+    .writings-row span:first-child { transition: none; }
   }
 </style>
 

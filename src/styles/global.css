@@ -24,4 +24,31 @@
   --duration-slide: 280ms;
   --ease-hover: ease-in-out;
   --ease-slide: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-glider-frame-0: glider-frame-0 2s steps(1) forwards;
+  --animate-glider-frame-1: glider-frame-1 2s steps(1) forwards;
+  --animate-glider-frame-2: glider-frame-2 2s steps(1) forwards;
+  --animate-glider-frame-3: glider-frame-3 2s steps(1) forwards;
+}
+
+@keyframes glider-frame-0 {
+  0%, 74.9% { visibility: hidden; }
+  75%, 100% { visibility: visible; }
+}
+
+@keyframes glider-frame-1 {
+  0%, 49.9% { visibility: hidden; }
+  50% { visibility: visible; }
+  75% { visibility: hidden; }
+}
+
+@keyframes glider-frame-2 {
+  0%, 24.9% { visibility: hidden; }
+  25% { visibility: visible; }
+  50% { visibility: hidden; }
+}
+
+@keyframes glider-frame-3 {
+  0% { visibility: visible; }
+  25%, 100% { visibility: hidden; }
 }
