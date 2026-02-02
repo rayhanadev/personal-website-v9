@@ -15,13 +15,20 @@ interface CuriusResponse {
 const response = await fetch("https://curius.app/api/library?user=ray-arayilakath");
 const data: CuriusResponse = await response.json();
 const bookmarks = data.library;
+
+function getHostname(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
 ---
 
 <Layout
   title="Bookmarks - Ray Arayilakath"
   description="Links and articles saved by Ray Arayilakath."
 >
-  <section class="w-184 flex flex-col gap-4 font-sans">
     <h2 class="text-[20px] leading-[22px] font-semibold">Bookmarks</h2>
     <div class="bookmarks-list relative flex flex-col">
       <div class="bookmarks-indicator absolute bg-black rounded-sm pointer-events-none will-change-transform"></div>
@@ -35,13 +42,15 @@ const bookmarks = data.library;
           <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px] transition-colors duration-150 ease-out">
             {new Date(item.modifiedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
           </span>
-          <span class="bookmarks-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit transition-colors duration-200 ease-out">
-            {item.title}
+          <span class="flex gap-2 items-baseline">
+            <span class="bookmarks-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit transition-colors duration-200 ease-out">
+              {item.title}
+            </span>
+            <span class="text-xs text-[#979494]">({getHostname(item.link)})</span>
           </span>
         </a>
       ))}
     </div>
-  </section>
 </Layout>
 
 <style>
