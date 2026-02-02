@@ -70,7 +70,20 @@ const NAVIGATION = [
 <script>
   import { getEdge, isHorizontal, type Edge } from '../lib/edge-animation';
 
+  const nav = document.querySelector('.nav-bar') as HTMLElement;
+  const indicator = document.querySelector('.nav-indicator') as HTMLElement;
+  const links = document.querySelectorAll('.nav-link');
+
+  function applyEdge(edge: Edge): void {
+    indicator.style.transformOrigin = edge;
+    indicator.classList.toggle('scale-x', isHorizontal(edge));
+    indicator.classList.toggle('scale-y', !isHorizontal(edge));
+  }
+
+  let entryEdge: Edge = 'bottom';
   let tabDirection: 'forward' | 'backward' = 'forward';
+
+  const HORIZONTAL_BIAS = 1.75;
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
@@ -78,73 +91,53 @@ const NAVIGATION = [
     }
   });
 
-  function initNavBar(): void {
-    const nav = document.querySelector('.nav-bar') as HTMLElement;
-    const indicator = document.querySelector('.nav-indicator') as HTMLElement;
-    const links = document.querySelectorAll('.nav-link');
+  nav.addEventListener('mouseenter', (e) => {
+    entryEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
+  });
 
-    if (!nav || !indicator) return;
+  function activateLink(link: Element, isKeyboard: boolean = false): void {
+    const wasActive = nav.classList.contains('active');
+    links.forEach(l => l.classList.remove('hovered'));
+    link.classList.add('hovered');
 
-    const HORIZONTAL_BIAS = 1.75;
-    let entryEdge: Edge = 'bottom';
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    nav.style.setProperty('--indicator-x', `${linkRect.left - navRect.left}px`);
+    nav.style.setProperty('--indicator-width', `${linkRect.width}px`);
 
-    function applyEdge(edge: Edge): void {
-      indicator.style.transformOrigin = edge;
-      indicator.classList.toggle('scale-x', isHorizontal(edge));
-      indicator.classList.toggle('scale-y', !isHorizontal(edge));
+    if (!wasActive) {
+      indicator.style.transition = 'none';
+      indicator.classList.remove('exit-slow');
+      const edge = isKeyboard ? (tabDirection === 'forward' ? 'left' : 'right') : entryEdge;
+      applyEdge(edge);
+      void indicator.offsetHeight;
+      indicator.style.transition = '';
+      nav.classList.add('active');
     }
-
-    function activateLink(link: Element, isKeyboard: boolean = false): void {
-      const wasActive = nav.classList.contains('active');
-      links.forEach(l => l.classList.remove('hovered'));
-      link.classList.add('hovered');
-
-      const navRect = nav.getBoundingClientRect();
-      const linkRect = link.getBoundingClientRect();
-      nav.style.setProperty('--indicator-x', `${linkRect.left - navRect.left}px`);
-      nav.style.setProperty('--indicator-width', `${linkRect.width}px`);
-
-      if (!wasActive) {
-        indicator.style.transition = 'none';
-        indicator.classList.remove('exit-slow');
-        const edge = isKeyboard ? (tabDirection === 'forward' ? 'left' : 'right') : entryEdge;
-        applyEdge(edge);
-        void indicator.offsetHeight;
-        indicator.style.transition = '';
-        nav.classList.add('active');
-      }
-    }
-
-    function deactivate(exitEdge: Edge): void {
-      applyEdge(exitEdge);
-      indicator.classList.toggle('exit-slow', exitEdge === 'top');
-      nav.classList.remove('active');
-      links.forEach(l => l.classList.remove('hovered'));
-    }
-
-    nav.addEventListener('mouseenter', (e) => {
-      entryEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
-    });
-
-    links.forEach((link) => {
-      link.addEventListener('mouseenter', () => activateLink(link, false));
-      link.addEventListener('focus', () => activateLink(link, true));
-    });
-
-    nav.addEventListener('mouseleave', (e) => {
-      const exitEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
-      deactivate(exitEdge);
-    });
-
-    nav.addEventListener('focusout', (e) => {
-      const relatedTarget = (e as FocusEvent).relatedTarget as Element | null;
-      if (!relatedTarget || !nav.contains(relatedTarget)) {
-        const exitEdge: Edge = tabDirection === 'forward' ? 'right' : 'left';
-        deactivate(exitEdge);
-      }
-    });
   }
 
-  initNavBar();
-  document.addEventListener('astro:page-load', initNavBar);
+  links.forEach((link) => {
+    link.addEventListener('mouseenter', () => activateLink(link, false));
+    link.addEventListener('focus', () => activateLink(link, true));
+  });
+
+  function deactivate(exitEdge: Edge): void {
+    applyEdge(exitEdge);
+    indicator.classList.toggle('exit-slow', exitEdge === 'top');
+    nav.classList.remove('active');
+    links.forEach(l => l.classList.remove('hovered'));
+  }
+
+  nav.addEventListener('mouseleave', (e) => {
+    const exitEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
+    deactivate(exitEdge);
+  });
+
+  nav.addEventListener('focusout', (e) => {
+    const relatedTarget = (e as FocusEvent).relatedTarget as Element | null;
+    if (!relatedTarget || !nav.contains(relatedTarget)) {
+      const exitEdge: Edge = tabDirection === 'forward' ? 'right' : 'left';
+      deactivate(exitEdge);
+    }
+  });
 </script>

@@ -16,5 +16,60 @@ const posts: SubstackPost[] = await response.json();
   title="Ray Arayilakath - Software Engineer"
   description="Platform Engineer @ Million (YC W24). Previously at Replit, Deel. 5+ years of experience growing engineering at YC-backed startups."
 >
+  <canvas id="gol-canvas" class="fixed inset-0 pointer-events-none -z-10 opacity-0 invisible"></canvas>
   <Writings posts={posts} />
 </Layout>
+
+<script>
+  import { createGameOfLife, setupKonamiCode } from "../lib/game-of-life";
+
+  let gol: ReturnType<typeof createGameOfLife> | null = null;
+  let active = false;
+  let cleanupKonami: (() => void) | null = null;
+
+  const getCanvas = (): HTMLCanvasElement | null =>
+    document.getElementById("gol-canvas") as HTMLCanvasElement | null;
+
+  function showGame(canvas: HTMLCanvasElement): void {
+    active = true;
+    canvas.classList.remove("opacity-0", "invisible");
+    document.body.classList.add("select-none");
+    gol?.start();
+  }
+
+  function hideGame(canvas: HTMLCanvasElement): void {
+    active = false;
+    gol?.stop(() => {
+      canvas.classList.add("opacity-0", "invisible");
+      document.body.classList.remove("select-none");
+    });
+  }
+
+  function init(): void {
+    const canvas = getCanvas();
+    if (!canvas) return;
+
+    if (!gol) {
+      gol = createGameOfLife(canvas);
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && active) {
+          const c = getCanvas();
+          if (c) hideGame(c);
+        }
+      });
+    }
+
+    cleanupKonami?.();
+    cleanupKonami = setupKonamiCode(() => {
+      if (!active) showGame(canvas);
+    });
+  }
+
+  document.addEventListener("astro:before-preparation", () => {
+    const canvas = getCanvas();
+    if (active && canvas) hideGame(canvas);
+  });
+
+  document.addEventListener("astro:page-load", init);
+  init();
+</script>
