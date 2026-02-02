@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 200ms ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 @theme inline {
   --font-sans:
     var(--font-general-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
