@@ -32,23 +32,48 @@
 }
 
 @keyframes glider-frame-0 {
-  0%, 74.9% { visibility: hidden; }
-  75%, 100% { visibility: visible; }
+  0%,
+  74.9% {
+    visibility: hidden;
+  }
+  75%,
+  100% {
+    visibility: visible;
+  }
 }
 
 @keyframes glider-frame-1 {
-  0%, 49.9% { visibility: hidden; }
-  50% { visibility: visible; }
-  75% { visibility: hidden; }
+  0%,
+  49.9% {
+    visibility: hidden;
+  }
+  50% {
+    visibility: visible;
+  }
+  75% {
+    visibility: hidden;
+  }
 }
 
 @keyframes glider-frame-2 {
-  0%, 24.9% { visibility: hidden; }
-  25% { visibility: visible; }
-  50% { visibility: hidden; }
+  0%,
+  24.9% {
+    visibility: hidden;
+  }
+  25% {
+    visibility: visible;
+  }
+  50% {
+    visibility: hidden;
+  }
 }
 
 @keyframes glider-frame-3 {
-  0% { visibility: visible; }
-  25%, 100% { visibility: hidden; }
+  0% {
+    visibility: visible;
+  }
+  25%,
+  100% {
+    visibility: hidden;
+  }
 }
