@@ -17,29 +17,54 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
   </div>
   <div class="flex flex-col-reverse items-end gap-4">
     <NavBar />
-    <Link href="https://purduehackers.com" class="glider-link size-8.25 relative block" unstyled>
+    <a
+      href="https://purduehackers.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="glider-link size-8.25 relative block"
+      transition:persist="glider"
+      transition:animate="none"
+    >
       {gliders.map((src, i) => (
         <img src={src.src} alt="" draggable="false" loading="eager" fetchpriority="high" class:list={["glider-frame size-8.25 absolute inset-0", `frame-${i}`]} />
       ))}
-    </Link>
+    </a>
   </div>
 </header>
 
 <script>
-  const gliderLink = document.querySelector('.glider-link');
-  const frames = gliderLink?.querySelectorAll('.glider-frame');
-  if (frames?.length) {
-    Promise.all(
-      Array.from(frames).map(img => 
-        (img as HTMLImageElement).complete 
-          ? Promise.resolve() 
-          : new Promise(resolve => { img.addEventListener('load', resolve, { once: true }); })
-      )
-    ).then(() => {
-      gliderLink?.classList.add('loaded');
-      setTimeout(() => gliderLink?.classList.add('ready'), 2000);
+  const ANIMATION_DURATION = 2000;
+
+  function waitForImages(images: NodeListOf<Element>): Promise<void[]> {
+    return Promise.all(
+      Array.from(images).map(img => {
+        const image = img as HTMLImageElement;
+        if (image.complete) return Promise.resolve();
+        return new Promise<void>(resolve => {
+          image.addEventListener('load', () => resolve(), { once: true });
+        });
+      })
+    );
+  }
+
+  function initGlider(): void {
+    const gliderLink = document.querySelector('.glider-link');
+    if (!gliderLink || gliderLink.classList.contains('animation-done')) return;
+
+    const frames = gliderLink.querySelectorAll('.glider-frame');
+    if (!frames.length) return;
+
+    waitForImages(frames).then(() => {
+      gliderLink.classList.add('loaded');
+      setTimeout(() => {
+        gliderLink.classList.remove('loaded');
+        gliderLink.classList.add('animation-done', 'ready');
+      }, ANIMATION_DURATION);
     });
   }
+
+  initGlider();
+  document.addEventListener('astro:page-load', initGlider);
 </script>
 
 <style>
@@ -50,6 +75,9 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
   .glider-link.loaded .frame-2 { animation: frame2 2s steps(1) forwards; }
   .glider-link.loaded .frame-1 { animation: frame1 2s steps(1) forwards; }
   .glider-link.loaded .frame-0 { animation: frame0 2s steps(1) forwards; }
+
+  .glider-link.animation-done .glider-frame { visibility: hidden; }
+  .glider-link.animation-done .frame-0 { visibility: visible; }
 
   @keyframes frame3 { 0% { visibility: visible; } 25%, 100% { visibility: hidden; } }
   @keyframes frame2 { 0%, 24.9% { visibility: hidden; } 25% { visibility: visible; } 50% { visibility: hidden; } }

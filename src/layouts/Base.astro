@@ -1,21 +1,23 @@
 ---
-import Analytics from '@vercel/analytics/astro'
+import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 
 import Favicons from "../components/Favicons.astro";
 import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 import "../styles/global.css";
 
-const { title, description, keywords } = Astro.props;
-
-export interface Props {
+interface Props {
   title: string;
   description: string;
   keywords?: string[];
 }
+
+const { title, description, keywords } = Astro.props;
 ---
 
 <!doctype html>
@@ -54,6 +56,10 @@ export interface Props {
         </script>
     </head>
     <body class="flex flex-col h-dvh w-full antialiased">
-        <slot />
+        <main class="flex flex-col items-center flex-1 py-20">
+            <Header />
+            <slot />
+            <Footer />
+        </main>
     </body>
 </html>
