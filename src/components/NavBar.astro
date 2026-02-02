@@ -24,6 +24,7 @@ const NAVIGATION = [
     position: relative;
     text-decoration: underline;
     text-underline-offset: 2px;
+    text-decoration-color: #ccc;
     padding: 2px 4px;
     border-radius: 2px;
     outline: none;
@@ -59,7 +60,7 @@ const NAVIGATION = [
   .nav-bar.active .nav-link.hovered { color: white; text-decoration: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .nav-link { text-decoration-color: #999; transition: none; }
+    .nav-link { text-decoration-color: #ccc; transition: none; }
     .nav-link:hover, .nav-link:focus { text-decoration-color: black; }
     .nav-indicator { display: none; }
     .nav-bar.active .nav-link.hovered { color: inherit; text-decoration: underline; text-decoration-color: black; }
