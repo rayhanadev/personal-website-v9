@@ -56,10 +56,73 @@ const { title, description, keywords } = Astro.props;
         </script>
     </head>
     <body class="flex flex-col h-dvh w-full antialiased">
+        <canvas id="gol-canvas" class="fixed inset-0 pointer-events-none -z-10 opacity-0 invisible" transition:persist></canvas>
         <main class="flex flex-col items-center flex-1 py-20">
             <Header />
             <slot />
             <Footer />
         </main>
+        <script>
+            import { createGameOfLife, setupKonamiCode } from "../lib/game-of-life";
+
+            let gol: ReturnType<typeof createGameOfLife> | null = null;
+            let active = false;
+            let cleanupKonami: (() => void) | null = null;
+
+            const isMainPage = (): boolean => window.location.pathname === "/";
+            const getCanvas = (): HTMLCanvasElement | null =>
+                document.getElementById("gol-canvas") as HTMLCanvasElement | null;
+
+            function showGame(canvas: HTMLCanvasElement): void {
+                active = true;
+                canvas.classList.remove("opacity-0", "invisible");
+                document.body.classList.add("select-none");
+                gol?.start();
+            }
+
+            function hideGame(canvas: HTMLCanvasElement): void {
+                active = false;
+                gol?.stop(() => {
+                    canvas.classList.add("opacity-0", "invisible");
+                    document.body.classList.remove("select-none");
+                });
+            }
+
+            function init(): void {
+                const canvas = getCanvas();
+                if (!canvas) return;
+
+                if (active) {
+                    if (isMainPage()) {
+                        document.body.classList.add("select-none");
+                    } else {
+                        hideGame(canvas);
+                    }
+                }
+
+                if (!gol) {
+                    gol = createGameOfLife(canvas);
+                    window.addEventListener("keydown", (e) => {
+                        if (e.key === "Escape" && active) {
+                            const c = getCanvas();
+                            if (c) hideGame(c);
+                        }
+                    });
+                }
+
+                cleanupKonami?.();
+                cleanupKonami = setupKonamiCode(() => {
+                    if (!active && isMainPage()) showGame(canvas);
+                });
+            }
+
+            document.addEventListener("astro:before-preparation", () => {
+                const canvas = getCanvas();
+                if (active && canvas) hideGame(canvas);
+            });
+
+            document.addEventListener("astro:page-load", init);
+            init();
+        </script>
     </body>
 </html>
