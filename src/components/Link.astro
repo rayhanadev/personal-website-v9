@@ -13,25 +13,24 @@ const linkClass = unstyled ? className : ["link", className];
 ---
 
 {isExternal ? (
-  <a href={href} target="_blank" rel="noopener noreferrer" class:list={linkClass} {...rest}>
+  <a href={href} target="_blank" rel="noopener noreferrer" class:list={linkClass} style="cursor: pointer;" {...rest}>
     <slot />
   </a>
 ) : (
-  <a href={href} class:list={linkClass} {...rest}>
+  <a href={href} class:list={linkClass} style="cursor: pointer;" {...rest}>
     <slot />
   </a>
 )}
 
 <style>
   .link {
-    --origin: bottom;
-    --scale: scaleY(0);
     position: relative;
     text-decoration: underline;
     text-underline-offset: 2px;
     padding: 2px 4px;
     margin: -2px -4px;
     border-radius: 2px;
+    outline: none;
     transition: color 200ms ease-out;
   }
 
@@ -41,30 +40,23 @@ const linkClass = unstyled ? className : ["link", className];
     inset: 0;
     background-color: black;
     border-radius: 2px;
-    transform: var(--scale);
-    transform-origin: var(--origin);
+    transform: var(--scale, scaleY(0));
+    transform-origin: var(--origin, bottom);
     transition: transform var(--duration-hover) var(--ease-hover);
     z-index: -1;
-    will-change: transform;
   }
 
-  .link.no-transition::before {
-    transition: none;
-  }
+  .link.no-transition::before { transition: none; }
+  .link.exit-slow::before { transition: transform var(--duration-hover-slow) var(--ease-hover); }
 
-  .link.exit-slow::before {
-    transition: transform var(--duration-hover-slow) var(--ease-hover);
-  }
+  .link.active { color: white; text-decoration: none; }
+  .link.active::before { transform: scale(1); }
 
-  @media (hover: hover) and (pointer: fine) {
-    .link.active {
-      color: white;
-      text-decoration: none;
-    }
-
-    .link.active::before {
-      transform: scale(1);
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .link { text-decoration-color: #999; transition: none; }
+    .link::before { display: none; }
+    .link:hover, .link:focus { text-decoration-color: black; }
+    .link.active { color: inherit; text-decoration: underline; text-decoration-color: black; }
   }
 </style>
 
@@ -75,6 +67,14 @@ const linkClass = unstyled ? className : ["link", className];
     link.style.setProperty('--origin', edge);
     link.style.setProperty('--scale', getScaleTransform(edge));
   }
+
+  let tabDirection: 'forward' | 'backward' = 'forward';
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      tabDirection = e.shiftKey ? 'backward' : 'forward';
+    }
+  });
 
   function initLinks(): void {
     document.querySelectorAll<HTMLElement>('.link').forEach((link) => {
@@ -92,6 +92,23 @@ const linkClass = unstyled ? className : ["link", className];
         const edge = getEdge(e, link.getBoundingClientRect());
         applyEdge(link, edge);
         link.classList.toggle('exit-slow', edge === 'top');
+        link.classList.remove('active');
+      });
+
+      link.addEventListener('focus', () => {
+        const enterEdge: Edge = tabDirection === 'forward' ? 'bottom' : 'top';
+        link.classList.add('no-transition');
+        link.classList.remove('exit-slow', 'active');
+        applyEdge(link, enterEdge);
+        void link.offsetHeight;
+        link.classList.remove('no-transition');
+        link.classList.add('active');
+      });
+
+      link.addEventListener('blur', () => {
+        const exitEdge: Edge = tabDirection === 'forward' ? 'top' : 'bottom';
+        applyEdge(link, exitEdge);
+        link.classList.toggle('exit-slow', exitEdge === 'top');
         link.classList.remove('active');
       });
     });

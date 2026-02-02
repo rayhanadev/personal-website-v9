@@ -14,66 +14,55 @@ const NAVIGATION = [
       target={item.href.startsWith("http") ? "_blank" : undefined}
       rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
       class="nav-link text-base leading-5"
+      style="cursor: pointer;"
     >{item.name}</a>
   ))}
 </nav>
 
 <style>
-  .nav-bar {
-    --indicator-x: 0;
-    --indicator-width: 0;
-  }
-
   .nav-link {
     position: relative;
     text-decoration: underline;
     text-underline-offset: 2px;
     padding: 2px 4px;
     border-radius: 2px;
+    outline: none;
     transition: color 200ms ease-out;
     z-index: 1;
   }
 
   .nav-indicator {
     position: absolute;
-    top: 0;
-    left: var(--indicator-x);
-    width: var(--indicator-width);
-    height: 100%;
+    inset-block: 0;
+    left: var(--indicator-x, 0);
+    width: var(--indicator-width, 0);
     background-color: black;
     border-radius: 2px;
     transform: scale(0);
     transform-origin: bottom;
     transition: transform var(--duration-hover) var(--ease-hover);
     pointer-events: none;
-    will-change: transform;
   }
 
-  .nav-indicator.scale-y {
-    transform: scaleY(0);
+  .nav-indicator.scale-y { transform: scaleY(0); }
+  .nav-indicator.scale-x { transform: scaleX(0); }
+  .nav-indicator.exit-slow { transition: transform var(--duration-hover-slow) var(--ease-hover); }
+
+  .nav-bar.active .nav-indicator {
+    transform: scale(1);
+    transition:
+      transform var(--duration-hover) var(--ease-hover),
+      left var(--duration-slide) var(--ease-slide),
+      width var(--duration-slide) var(--ease-slide);
   }
 
-  .nav-indicator.scale-x {
-    transform: scaleX(0);
-  }
+  .nav-bar.active .nav-link.hovered { color: white; text-decoration: none; }
 
-  @media (hover: hover) and (pointer: fine) {
-    .nav-bar.active .nav-indicator {
-      transform: scale(1);
-      transition:
-        transform var(--duration-hover) var(--ease-hover),
-        left var(--duration-slide) var(--ease-slide),
-        width var(--duration-slide) var(--ease-slide);
-    }
-
-    .nav-indicator.exit-slow {
-      transition: transform var(--duration-hover-slow) var(--ease-hover);
-    }
-
-    .nav-bar.active .nav-link.hovered {
-      color: white;
-      text-decoration: none;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link { text-decoration-color: #999; transition: none; }
+    .nav-link:hover, .nav-link:focus { text-decoration-color: black; }
+    .nav-indicator { display: none; }
+    .nav-bar.active .nav-link.hovered { color: inherit; text-decoration: underline; text-decoration-color: black; }
   }
 </style>
 
@@ -91,40 +80,64 @@ const NAVIGATION = [
   }
 
   let entryEdge: Edge = 'bottom';
+  let tabDirection: 'forward' | 'backward' = 'forward';
 
   const HORIZONTAL_BIAS = 1.75;
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      tabDirection = e.shiftKey ? 'backward' : 'forward';
+    }
+  });
 
   nav.addEventListener('mouseenter', (e) => {
     entryEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
   });
 
+  function activateLink(link: Element, isKeyboard: boolean = false): void {
+    const wasActive = nav.classList.contains('active');
+    links.forEach(l => l.classList.remove('hovered'));
+    link.classList.add('hovered');
+
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    nav.style.setProperty('--indicator-x', `${linkRect.left - navRect.left}px`);
+    nav.style.setProperty('--indicator-width', `${linkRect.width}px`);
+
+    if (!wasActive) {
+      indicator.style.transition = 'none';
+      indicator.classList.remove('exit-slow');
+      const edge = isKeyboard ? (tabDirection === 'forward' ? 'left' : 'right') : entryEdge;
+      applyEdge(edge);
+      void indicator.offsetHeight;
+      indicator.style.transition = '';
+      nav.classList.add('active');
+    }
+  }
+
   links.forEach((link) => {
-    link.addEventListener('mouseenter', () => {
-      const wasActive = nav.classList.contains('active');
-      links.forEach(l => l.classList.remove('hovered'));
-      link.classList.add('hovered');
+    link.addEventListener('mouseenter', () => activateLink(link, false));
 
-      const navRect = nav.getBoundingClientRect();
-      const linkRect = link.getBoundingClientRect();
-      nav.style.setProperty('--indicator-x', `${linkRect.left - navRect.left}px`);
-      nav.style.setProperty('--indicator-width', `${linkRect.width}px`);
-
-      if (!wasActive) {
-        indicator.style.transition = 'none';
-        indicator.classList.remove('exit-slow');
-        applyEdge(entryEdge);
-        void indicator.offsetHeight;
-        indicator.style.transition = '';
-        nav.classList.add('active');
-      }
-    });
+    link.addEventListener('focus', () => activateLink(link, true));
   });
 
-  nav.addEventListener('mouseleave', (e) => {
-    const exitEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
+  function deactivate(exitEdge: Edge): void {
     applyEdge(exitEdge);
     indicator.classList.toggle('exit-slow', exitEdge === 'top');
     nav.classList.remove('active');
     links.forEach(l => l.classList.remove('hovered'));
+  }
+
+  nav.addEventListener('mouseleave', (e) => {
+    const exitEdge = getEdge(e, nav.getBoundingClientRect(), HORIZONTAL_BIAS);
+    deactivate(exitEdge);
+  });
+
+  nav.addEventListener('focusout', (e) => {
+    const relatedTarget = (e as FocusEvent).relatedTarget as Element | null;
+    if (!relatedTarget || !nav.contains(relatedTarget)) {
+      const exitEdge: Edge = tabDirection === 'forward' ? 'right' : 'left';
+      deactivate(exitEdge);
+    }
   });
 </script>

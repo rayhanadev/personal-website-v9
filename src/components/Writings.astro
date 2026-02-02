@@ -40,6 +40,7 @@ const { posts } = Astro.props;
     position: relative;
     z-index: 1;
     padding: 4px 0;
+    outline: none;
   }
 
   .writings-title {
@@ -61,33 +62,67 @@ const { posts } = Astro.props;
     will-change: transform;
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .writings-list.active .writings-indicator {
-      transform: scaleY(1);
-      transition:
-        transform var(--duration-hover) var(--ease-hover),
-        top var(--duration-slide) var(--ease-slide),
-        left var(--duration-slide) var(--ease-slide),
-        width var(--duration-slide) var(--ease-slide),
-        height var(--duration-slide) var(--ease-slide);
+  .writings-list.active .writings-indicator {
+    transform: scaleY(1);
+    transition:
+      transform var(--duration-hover) var(--ease-hover),
+      top var(--duration-slide) var(--ease-slide),
+      left var(--duration-slide) var(--ease-slide),
+      width var(--duration-slide) var(--ease-slide),
+      height var(--duration-slide) var(--ease-slide);
+  }
+
+  .writings-list.active .writings-title.hovered {
+    color: white;
+    text-decoration: none;
+  }
+
+  .writings-row span:first-child {
+    transition: color 150ms ease-out;
+  }
+
+  .writings-row:hover span:first-child,
+  .writings-row:focus span:first-child,
+  .writings-row:focus-visible span:first-child {
+    color: #4a4747;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .writings-title {
+      text-decoration-color: #999;
+      transition: none;
+    }
+
+    .writings-row:hover .writings-title,
+    .writings-row:focus .writings-title {
+      text-decoration-color: black;
+    }
+
+    .writings-indicator {
+      display: none;
     }
 
     .writings-list.active .writings-title.hovered {
-      color: white;
-      text-decoration: none;
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: black;
     }
 
     .writings-row span:first-child {
-      transition: color 150ms ease-out;
-    }
-
-    .writings-row:hover span:first-child {
-      color: #4a4747;
+      transition: none;
     }
   }
 </style>
 
 <script>
+  let tabDirection: 'forward' | 'backward' = 'forward';
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      tabDirection = e.shiftKey ? 'backward' : 'forward';
+    }
+  });
+
   function initWritings(): void {
     const list = document.querySelector('.writings-list') as HTMLElement;
     if (!list) return;
@@ -102,37 +137,56 @@ const { posts } = Astro.props;
       entryFromTop = e.clientY < rect.top + rect.height / 2;
     });
 
+    function activateRow(title: HTMLElement, isKeyboard: boolean = false): void {
+      const wasActive = list.classList.contains('active');
+      titles.forEach(t => t.classList.remove('hovered'));
+      title.classList.add('hovered');
+
+      const listRect = list.getBoundingClientRect();
+      const titleRect = title.getBoundingClientRect();
+      list.style.setProperty('--indicator-y', `${titleRect.top - listRect.top}px`);
+      list.style.setProperty('--indicator-height', `${titleRect.height}px`);
+      list.style.setProperty('--indicator-x', `${titleRect.left - listRect.left - 4}px`);
+      list.style.setProperty('--indicator-width', `${titleRect.width + 8}px`);
+
+      if (!wasActive) {
+        indicator.style.transition = 'none';
+        const origin = isKeyboard
+          ? (tabDirection === 'forward' ? 'top' : 'bottom')
+          : (entryFromTop ? 'top' : 'bottom');
+        indicator.style.transformOrigin = origin;
+        void indicator.offsetHeight;
+        indicator.style.transition = '';
+        list.classList.add('active');
+      }
+    }
+
     rows.forEach((row) => {
       const title = row.querySelector('.writings-title') as HTMLElement;
 
-      row.addEventListener('mouseenter', () => {
-        const wasActive = list.classList.contains('active');
-        titles.forEach(t => t.classList.remove('hovered'));
-        title.classList.add('hovered');
+      row.addEventListener('mouseenter', () => activateRow(title, false));
 
-        const listRect = list.getBoundingClientRect();
-        const titleRect = title.getBoundingClientRect();
-        list.style.setProperty('--indicator-y', `${titleRect.top - listRect.top}px`);
-        list.style.setProperty('--indicator-height', `${titleRect.height}px`);
-        list.style.setProperty('--indicator-x', `${titleRect.left - listRect.left - 4}px`);
-        list.style.setProperty('--indicator-width', `${titleRect.width + 8}px`);
-
-        if (!wasActive) {
-          indicator.style.transition = 'none';
-          indicator.style.transformOrigin = entryFromTop ? 'top' : 'bottom';
-          void indicator.offsetHeight;
-          indicator.style.transition = '';
-          list.classList.add('active');
-        }
-      });
+      row.addEventListener('focus', () => activateRow(title, true));
     });
+
+    function deactivate(exitOrigin: string): void {
+      indicator.style.transformOrigin = exitOrigin;
+      list.classList.remove('active');
+      titles.forEach(t => t.classList.remove('hovered'));
+    }
 
     list.addEventListener('mouseleave', (e) => {
       const rect = list.getBoundingClientRect();
       const exitedUp = e.clientY < rect.top + rect.height / 2;
-      indicator.style.transformOrigin = exitedUp ? 'top' : 'bottom';
-      list.classList.remove('active');
-      titles.forEach(t => t.classList.remove('hovered'));
+      deactivate(exitedUp ? 'top' : 'bottom');
+    });
+
+    list.addEventListener('focusout', (e) => {
+      const relatedTarget = (e as FocusEvent).relatedTarget as Element | null;
+      if (!relatedTarget || !list.contains(relatedTarget)) {
+        const exitOrigin = tabDirection === 'forward' ? 'bottom' : 'top';
+        deactivate(exitOrigin);
+      }
     });
   }
 
