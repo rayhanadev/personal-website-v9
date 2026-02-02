@@ -1,15 +1,6 @@
 ---
 import Layout from "../layouts/Base.astro";
 import Writings from "../components/Writings.astro";
-
-interface SubstackPost {
-  title: string;
-  post_date: string;
-  canonical_url: string;
-}
-
-const response = await fetch("https://rayhanadev.substack.com/api/v1/posts?limit=10");
-const posts: SubstackPost[] = await response.json();
 ---
 
 <Layout
@@ -17,7 +8,7 @@ const posts: SubstackPost[] = await response.json();
   description="Platform Engineer @ Million (YC W24). Previously at Replit, Deel. 5+ years of experience growing engineering at YC-backed startups."
 >
   <canvas id="gol-canvas" class="fixed inset-0 pointer-events-none -z-10 opacity-0 invisible"></canvas>
-  <Writings posts={posts} />
+  <Writings />
 </Layout>
 
 <script>
