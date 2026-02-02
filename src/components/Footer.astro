@@ -1,0 +1,66 @@
+---
+import Link from "./Link.astro";
+
+import Github from "../assets/socials/Github.svg";
+import LinkedIn from "../assets/socials/LinkedIn.svg";
+import Twitter from "../assets/socials/Twitter.svg";
+
+const WEBRING_HOSTNAME = "https://ring.purduehackers.com";
+const host = new URL(import.meta.env.SITE).hostname;
+
+const webringLinks = [
+  { type: "previous", label: "prev" },
+  { type: "main", label: "main" },
+  { type: "next", label: "next" },
+] as const;
+
+function getWebringUrl(type: "previous" | "main" | "next"): string {
+  if (type === "main") {
+    return new URL("/", WEBRING_HOSTNAME).toString();
+  }
+  return new URL(`/${type}?host=${host}`, WEBRING_HOSTNAME).toString();
+}
+
+const commitSha = import.meta.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev";
+---
+
+<footer class="w-184 flex justify-between items-end font-sans">
+  <div class="flex flex-col justify-center items-start gap-2">
+    <div class="flex items-end gap-0.5 text-base leading-5">
+      <span>PH: (</span>
+      {webringLinks.map((link, i) => (
+        <>
+          <Link href={getWebringUrl(link.type)}>{link.label}</Link>
+          {i < webringLinks.length - 1 && <span>|</span>}
+        </>
+      ))}
+      <span>)</span>
+    </div>
+    <p class="text-base leading-5">Last seen in West Lafayette, IN</p>
+  </div>
+  <div class="flex flex-col justify-end items-end gap-2">
+    <div class="flex items-start gap-3">
+      <a href="https://x.com/rayhanadev" target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="social-icon">
+        <img src={Twitter.src} alt="" width="20" height="20" class="size-5" />
+      </a>
+      <a href="https://github.com/rayhanadev" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon">
+        <img src={Github.src} alt="" width="20" height="20" class="size-5" />
+      </a>
+      <a href="https://linkedin.com/in/rayhanadev" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
+        <img src={LinkedIn.src} alt="" width="20" height="20" class="size-5" />
+      </a>
+    </div>
+    <p class="text-base leading-5">{commitSha} on ▲</p>
+  </div>
+</footer>
+
+<style>
+  .social-icon {
+    opacity: 0.6;
+    transition: opacity 200ms ease;
+  }
+
+  .social-icon:hover {
+    opacity: 1;
+  }
+</style>
