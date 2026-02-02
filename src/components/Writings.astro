@@ -6,8 +6,8 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<section class="w-184 flex flex-col gap-4 antialiased font-['General_Sans_Variable',system-ui,sans-serif]">
-  <h2 class="text-lg leading-[22px] font-semibold">Writings</h2>
+<section class="w-184 flex flex-col gap-4 font-sans">
+  <h2 class="text-[20px] leading-[22px] font-semibold">Writings</h2>
   <div class="writings-list relative flex flex-col">
     <div class="writings-indicator"></div>
     {posts.map((post) => (
