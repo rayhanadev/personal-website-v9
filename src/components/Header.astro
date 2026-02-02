@@ -22,13 +22,14 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
       target="_blank"
       rel="noopener noreferrer"
       class="glider-link size-8.25 relative block outline-none"
+      style={`--glider-mask: url("${Glider0.src}")`}
       transition:persist="glider"
       transition:animate="none"
     >
-      <img src={gliders[0].src} alt="" draggable="false" loading="eager" fetchpriority="high" class="glider-frame size-8.25 absolute inset-0 invisible" />
-      <img src={gliders[1].src} alt="" draggable="false" loading="eager" fetchpriority="high" class="glider-frame size-8.25 absolute inset-0 invisible" />
-      <img src={gliders[2].src} alt="" draggable="false" loading="eager" fetchpriority="high" class="glider-frame size-8.25 absolute inset-0 invisible" />
-      <img src={gliders[3].src} alt="" draggable="false" loading="eager" fetchpriority="high" class="glider-frame size-8.25 absolute inset-0 visible" />
+      <img src={gliders[0].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 invisible" />
+      <img src={gliders[1].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 invisible" />
+      <img src={gliders[2].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 invisible" />
+      <img src={gliders[3].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 visible" />
     </a>
   </div>
 </header>
@@ -67,8 +68,8 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
     background-color: #fbbf24;
     opacity: 0;
     transition: opacity 350ms ease;
-    -webkit-mask: url("/src/assets/gliders/Glider0.svg") center / contain no-repeat;
-    mask: url("/src/assets/gliders/Glider0.svg") center / contain no-repeat;
+    -webkit-mask: var(--glider-mask) center / contain no-repeat;
+    mask: var(--glider-mask) center / contain no-repeat;
   }
 
   .glider-link.ready:hover::after, .glider-link.ready:focus::after { opacity: 1; }
