@@ -20,6 +20,7 @@
     "astro": "^5.17.1",
     "astro-capo": "^0.0.1",
     "astro-seo": "^1.1.0",
+    "gab-astro-compress": "^0.1.1",
     "react-grab": "^0.0.98",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"

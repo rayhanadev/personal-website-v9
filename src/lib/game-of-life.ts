@@ -1,7 +1,14 @@
 const KONAMI_CODE = [
-  "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
-  "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
-  "KeyB", "KeyA",
+  "ArrowUp",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowLeft",
+  "ArrowRight",
+  "KeyB",
+  "KeyA",
 ];
 
 interface GameOfLife {
@@ -56,10 +63,9 @@ export function createGameOfLife(canvas: HTMLCanvasElement): GameOfLife {
       if (!initialized) {
         const offscreen = canvas.transferControlToOffscreen();
 
-        worker = new Worker(
-          new URL("./game-of-life.worker.ts", import.meta.url),
-          { type: "module" }
-        );
+        worker = new Worker(new URL("./game-of-life.worker.ts", import.meta.url), {
+          type: "module",
+        });
 
         worker.onmessage = (e: MessageEvent) => {
           if (e.data.type === "fadeOutComplete") {
@@ -79,7 +85,7 @@ export function createGameOfLife(canvas: HTMLCanvasElement): GameOfLife {
               height: window.innerHeight,
             },
           },
-          [offscreen]
+          [offscreen],
         );
 
         initialized = true;

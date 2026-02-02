@@ -1,8 +1,8 @@
 import { defineConfig, fontProviders } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
-
 import tailwindcss from "@tailwindcss/vite";
+import astroCompress from "gab-astro-compress";
 
 export default defineConfig({
   output: "server",
@@ -20,7 +20,7 @@ export default defineConfig({
     "/rss.xml": "https://rayhanadev.substack.com/feed",
     "/blog": "https://substack.com/@rayhanadev",
   },
-  integrations: [sitemap()],
+  integrations: [sitemap(), astroCompress()],
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "load",

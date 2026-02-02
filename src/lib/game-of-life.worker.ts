@@ -8,10 +8,34 @@ const EXPLOSION_RADIUS = 6;
 const FADE_DURATION = 300;
 
 const GLIDER_PATTERNS = [
-  [[0, 1], [1, 2], [2, 0], [2, 1], [2, 2]],
-  [[0, 1], [1, 0], [2, 0], [2, 1], [2, 2]],
-  [[0, 0], [0, 1], [0, 2], [1, 2], [2, 1]],
-  [[0, 0], [0, 1], [0, 2], [1, 0], [2, 1]],
+  [
+    [0, 1],
+    [1, 2],
+    [2, 0],
+    [2, 1],
+    [2, 2],
+  ],
+  [
+    [0, 1],
+    [1, 0],
+    [2, 0],
+    [2, 1],
+    [2, 2],
+  ],
+  [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [1, 2],
+    [2, 1],
+  ],
+  [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [1, 0],
+    [2, 1],
+  ],
 ];
 
 const VERTEX_SHADER = `#version 300 es
@@ -153,7 +177,17 @@ function writePattern(x: number, y: number, size: number, data: Uint8Array): voi
   const clampedY = Math.max(0, Math.min(y, height - size));
   gl!.bindTexture(gl!.TEXTURE_2D, textures[current]);
   gl!.pixelStorei(gl!.UNPACK_ALIGNMENT, 1);
-  gl!.texSubImage2D(gl!.TEXTURE_2D, 0, clampedX, clampedY, size, size, gl!.RED, gl!.UNSIGNED_BYTE, data);
+  gl!.texSubImage2D(
+    gl!.TEXTURE_2D,
+    0,
+    clampedX,
+    clampedY,
+    size,
+    size,
+    gl!.RED,
+    gl!.UNSIGNED_BYTE,
+    data,
+  );
 }
 
 function spawnGlider(px: number, py: number): void {
