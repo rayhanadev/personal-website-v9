@@ -23,27 +23,30 @@ function getHostname(url: string): string {
 }
 ---
 
-<div class="bookmarks-list relative flex flex-col">
-  <div class="bookmarks-indicator absolute bg-black rounded-sm pointer-events-none will-change-transform"></div>
-  {bookmarks.map((item) => (
-    <a
-      href={item.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="bookmarks-row relative z-1 py-1 outline-none flex gap-6 w-full"
-    >
-      <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px] transition-colors duration-150 ease-out">
-        {new Date(item.modifiedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
-      </span>
-      <span class="flex gap-2 items-baseline">
-        <span class="bookmarks-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit transition-colors duration-200 ease-out">
-          {item.title}
+<section class="w-184 flex flex-col gap-4 font-sans">
+  <h2 class="text-[20px] leading-[22px] font-semibold">Bookmarks</h2>
+  <div class="bookmarks-list relative flex flex-col">
+    <div class="bookmarks-indicator absolute bg-black rounded-sm pointer-events-none will-change-transform"></div>
+    {bookmarks.map((item) => (
+      <a
+        href={item.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="bookmarks-row relative z-1 py-1 outline-none flex gap-6 w-full"
+      >
+        <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px] transition-colors duration-150 ease-out">
+          {new Date(item.modifiedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
         </span>
-        <span class="text-xs text-[#979494]">({getHostname(item.link)})</span>
-      </span>
-    </a>
-  ))}
-</div>
+        <span class="flex gap-2 items-baseline">
+          <span class="bookmarks-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit transition-colors duration-200 ease-out">
+            {item.title}
+          </span>
+          <span class="text-xs text-[#979494]">({getHostname(item.link)})</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</section>
 
 <style>
   .bookmarks-indicator {
