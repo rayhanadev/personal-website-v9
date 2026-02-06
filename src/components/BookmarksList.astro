@@ -1,13 +1,15 @@
 ---
+import Link from "./Link.astro";
+
 interface CuriusLink {
-  id: number;
   link: string;
   title: string;
   modifiedDate: string;
 }
 
 const res = await fetch("https://curius.app/api/users/6642/links");
-const { userSaved: bookmarks } = await res.json() as { userSaved: CuriusLink[] };
+const { userSaved } = await res.json() as { userSaved: CuriusLink[] };
+const bookmarks = userSaved.filter((item) => !item.link.includes("x.com/"));
 
 function getHostname(url: string): string {
   try {
@@ -18,8 +20,11 @@ function getHostname(url: string): string {
 }
 ---
 
-<section class="w-184 flex flex-col gap-4 font-sans">
+<section class="flex-1 mb-6 flex flex-col gap-4 font-sans">
   <h2 class="text-[20px] leading-[22px] font-semibold">Bookmarks</h2>
+  <p class="text-base leading-5">
+    Articles and links I've saved while browsing. See my <Link href="https://curius.app/ray-arayilakath">Curius profile</Link> for highlights and notes.
+  </p>
   <div class="bookmarks-list relative flex flex-col">
     <div class="bookmarks-indicator absolute bg-black rounded-sm pointer-events-none will-change-transform"></div>
     {bookmarks.map((item) => (
@@ -32,11 +37,11 @@ function getHostname(url: string): string {
         <span class="text-base leading-5 text-[#979494] shrink-0 w-[100px] transition-colors duration-150 ease-out">
           {new Date(item.modifiedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
         </span>
-        <span class="flex gap-2 items-baseline">
-          <span class="bookmarks-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] w-fit transition-colors duration-200 ease-out">
+        <span class="flex gap-2 items-baseline min-w-0">
+          <span class="bookmarks-title text-base leading-5 underline underline-offset-2 decoration-[#ccc] truncate transition-colors duration-200 ease-out">
             {item.title}
           </span>
-          <span class="text-xs text-[#979494]">({getHostname(item.link)})</span>
+          <span class="text-xs text-[#979494] shrink-0">({getHostname(item.link)})</span>
         </span>
       </a>
     ))}
