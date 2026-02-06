@@ -1,4 +1,5 @@
 ---
+import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import { ClientRouter } from "astro:transitions";
 import { Head } from "../lib/capo/Head.ts";
@@ -46,21 +47,9 @@ const { title, description, keywords } = Astro.props;
             href="https://rayhanadev.substack.com/feed"
         />
 
+        <Analytics />
         <SpeedInsights />
         <ClientRouter />
-        <script is:inline>
-            const idle = window.requestIdleCallback ?? ((cb) => setTimeout(cb, 200));
-
-            idle(() => {
-                window.va ??= (...args) => {
-                    (window.vaq ??= []).push(args);
-                };
-                const s = document.createElement("script");
-                s.defer = true;
-                s.src = "/_vercel/insights/script.js";
-                document.head.appendChild(s);
-            });
-        </script>
 
         <script>
             if (import.meta.env.DEV) {
