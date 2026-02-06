@@ -37,7 +37,7 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
 <script>
   const gliderLink = document.querySelector('.glider-link');
   const frames = gliderLink?.querySelectorAll('.glider-frame');
-  if (frames?.length) {
+  if (frames?.length && !gliderLink?.classList.contains('ready')) {
     Promise.all(
       Array.from(frames).map(img => 
         (img as HTMLImageElement).complete 
@@ -46,7 +46,14 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
       )
     ).then(() => {
       gliderLink?.classList.add('loaded');
-      setTimeout(() => gliderLink?.classList.add('ready'), 2000);
+      setTimeout(() => {
+        frames.forEach((frame, i) => {
+          const el = frame as HTMLElement;
+          el.style.animation = 'none';
+          el.style.visibility = i === 0 ? 'visible' : 'hidden';
+        });
+        gliderLink?.classList.add('ready');
+      }, 2000);
     });
   }
 </script>
