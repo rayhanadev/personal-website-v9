@@ -45,11 +45,6 @@
     });
   }
 
-  document.addEventListener("astro:before-preparation", () => {
-    const canvas = getCanvas();
-    if (active && canvas) hideGame(canvas);
-  });
-
   document.addEventListener("astro:page-load", init);
   init();
 </script>
