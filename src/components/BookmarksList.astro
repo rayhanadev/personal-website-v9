@@ -6,13 +6,8 @@ interface CuriusLink {
   modifiedDate: string;
 }
 
-interface CuriusResponse {
-  library: CuriusLink[];
-}
-
-const response = await fetch("https://curius.app/api/library?user=ray-arayilakath");
-const data: CuriusResponse = await response.json();
-const bookmarks = data.library;
+const res = await fetch("https://curius.app/api/users/6642/links");
+const { userSaved: bookmarks } = await res.json() as { userSaved: CuriusLink[] };
 
 function getHostname(url: string): string {
   try {
