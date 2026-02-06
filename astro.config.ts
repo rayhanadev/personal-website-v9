@@ -16,12 +16,6 @@ export default defineConfig({
     },
   }),
   site: "https://www.rayhanadev.com",
-  redirects: {
-    "/resume": "/resume.pdf",
-    "/contact": "/contact.vcf",
-    "/rss.xml": "https://rayhanadev.substack.com/feed",
-    "/blog": "https://substack.com/@rayhanadev",
-  },
   integrations: [sitemap(), astroCompress(), mdx()],
   prefetch: {
     prefetchAll: true,
@@ -29,6 +23,9 @@ export default defineConfig({
   },
   devToolbar: {
     enabled: false,
+  },
+  build: {
+    assets: "static",
   },
   vite: {
     plugins: [tailwindcss()],

@@ -26,6 +26,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@vercel/config": "^0.0.28",
     "oxfmt": "^0.27.0",
     "oxlint": "^1.42.0",
     "oxlint-tsgolint": "^0.11.4"
