@@ -70,46 +70,46 @@ html {
 @keyframes glider-frame-0 {
   0%,
   74.9% {
-    visibility: hidden;
+    opacity: 0;
   }
   75%,
   100% {
-    visibility: visible;
+    opacity: 1;
   }
 }
 
 @keyframes glider-frame-1 {
   0%,
   49.9% {
-    visibility: hidden;
+    opacity: 0;
   }
   50% {
-    visibility: visible;
+    opacity: 1;
   }
   75% {
-    visibility: hidden;
+    opacity: 0;
   }
 }
 
 @keyframes glider-frame-2 {
   0%,
   24.9% {
-    visibility: hidden;
+    opacity: 0;
   }
   25% {
-    visibility: visible;
+    opacity: 1;
   }
   50% {
-    visibility: hidden;
+    opacity: 0;
   }
 }
 
 @keyframes glider-frame-3 {
   0% {
-    visibility: visible;
+    opacity: 1;
   }
   25%,
   100% {
-    visibility: hidden;
+    opacity: 0;
   }
 }

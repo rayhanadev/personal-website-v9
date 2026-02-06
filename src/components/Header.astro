@@ -27,10 +27,10 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
       transition:persist="glider"
       transition:animate="none"
     >
-      <img src={gliders[0].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 invisible" />
-      <img src={gliders[1].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 invisible" />
-      <img src={gliders[2].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 invisible" />
-      <img src={gliders[3].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 visible" />
+      <img src={gliders[0].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 opacity-0" />
+      <img src={gliders[1].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 opacity-0" />
+      <img src={gliders[2].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0 opacity-0" />
+      <img src={gliders[3].src} alt="" draggable="false" loading="lazy" class="glider-frame size-8.25 absolute inset-0" />
     </a>
   </div>
 </header>
@@ -51,7 +51,7 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
         frames.forEach((frame, i) => {
           const el = frame as HTMLElement;
           el.style.animation = 'none';
-          el.style.visibility = i === 0 ? 'visible' : 'hidden';
+          el.style.opacity = i === 0 ? '1' : '0';
         });
         gliderLink?.classList.add('ready');
       }, 2000);
@@ -83,8 +83,8 @@ const gliders = [Glider0, Glider1, Glider2, Glider3];
   .glider-link.ready:hover::after, .glider-link.ready:focus::after { opacity: 1; }
 
   @media (prefers-reduced-motion: reduce) {
-    .glider-frame { animation: none !important; transition: none; visibility: visible !important; }
-    .glider-frame:not(:first-child) { visibility: hidden !important; }
+    .glider-frame { animation: none !important; transition: none; opacity: 1 !important; }
+    .glider-frame:not(:first-child) { opacity: 0 !important; }
     .glider-link::after { transition: none; }
   }
 </style>
