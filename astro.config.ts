@@ -16,7 +16,7 @@ export default defineConfig({
   integrations: [sitemap(), astroCompress(), mdx()],
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "load",
+    defaultStrategy: "hover",
   },
   devToolbar: {
     enabled: false,
