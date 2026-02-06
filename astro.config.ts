@@ -11,9 +11,6 @@ export default defineConfig({
   adapter: vercel({
     isr: true,
     imageService: true,
-    webAnalytics: {
-      enabled: true,
-    },
   }),
   site: "https://www.rayhanadev.com",
   integrations: [sitemap(), astroCompress(), mdx()],
