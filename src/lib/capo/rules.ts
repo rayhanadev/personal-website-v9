@@ -32,18 +32,18 @@ const RULES: [number, Detector][] = [
   }],
   [9, (tag) => tag === "title"],
   [8, (tag, p) => tag === "link" && str(p.rel) === "preconnect"],
-  [7, (tag, p) => tag === "script" && has(p.src) && has(p.async)],
-  [6, (tag, _, css) => tag === "style" && /@import/.test(css)],
-  [5, (tag, p) => {
+  [7, (tag, p) => {
+    const rel = str(p.rel)?.toLowerCase();
+    return tag === "link" && (rel === "preload" || rel === "modulepreload");
+  }],
+  [6, (tag, p) => tag === "script" && has(p.src) && has(p.async)],
+  [5, (tag, _, css) => tag === "style" && /@import/.test(css)],
+  [4, (tag, p) => {
     if (tag !== "script") return false;
     const type = str(p.type) ?? "";
     return !((has(p.src) && (has(p.defer) || has(p.async) || type === "module")) || type.includes("json"));
   }],
-  [4, (tag, p) => tag === "style" || (tag === "link" && str(p.rel) === "stylesheet")],
-  [3, (tag, p) => {
-    const rel = str(p.rel)?.toLowerCase();
-    return tag === "link" && (rel === "preload" || rel === "modulepreload");
-  }],
+  [3, (tag, p) => tag === "style" || (tag === "link" && str(p.rel) === "stylesheet")],
   [2, (tag, p) => {
     if (tag !== "script") return false;
     return (has(p.src) && has(p.defer)) ||
