@@ -37,7 +37,7 @@ export default defineConfig({
         provider: fontProviders.fontshare(),
         name: "General Sans",
         cssVariable: "--font-general-sans",
-        weights: [400, 900],
+        weights: ["400 900"],
         styles: ["normal"],
         subsets: ["latin"],
         formats: ["woff2"],
