@@ -6,6 +6,11 @@ html {
   }
 }
 
+::selection {
+  background: black;
+  color: white;
+}
+
 @theme inline {
   --font-sans:
     var(--font-general-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
