@@ -11,7 +11,7 @@ export const config: VercelConfig = {
    headers: [
      routes.cacheControl('/static/(.*)', {
        public: true,
-       maxAge: '1 week',
+       maxAge: '1 year',
        immutable: true
      }),
    ],
