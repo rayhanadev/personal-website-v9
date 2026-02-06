@@ -1,51 +1,32 @@
-import type { SSRResult } from "astro";
-// @ts-expect-error using astro internals
-import { renderAllHeadContent } from "astro/runtime/server/render/head.js";
-// @ts-expect-error using astro internals
 import {
   createComponent,
   unescapeHTML,
   renderSlotToString,
   spreadAttributes,
 } from "astro/runtime/server/index.js";
+import { renderAllHeadContent } from "astro/runtime/server/render/head.js";
 import capo from "./index.ts";
 
-interface RenderInstruction {
-  type: string;
-  content?: string;
-}
-
-interface SlotStringWithInstructions extends String {
-  instructions?: RenderInstruction[];
-}
-
 export const Head = createComponent({
-  factory: async (
-    result: SSRResult,
+  factory: (async (
+    result: any,
     props: Record<string, any>,
     slots: Record<string, any>,
   ) => {
-    const rendered: SlotStringWithInstructions = await renderSlotToString(
-      result,
-      slots.default,
-    );
+    const rendered: any = await renderSlotToString(result, slots.default);
 
     let scriptContent = "";
-    if (rendered.instructions) {
-      for (const instruction of rendered.instructions) {
-        if (instruction.type === "script" && instruction.content) {
-          scriptContent += instruction.content;
-        }
-      }
+    for (const ins of rendered.instructions ?? []) {
+      if (ins.type === "script" && ins.content) scriptContent += ins.content;
     }
 
-    let head = "";
-    head += `<head${spreadAttributes(props)} data-capo>`;
-    head += rendered.toString();
-    head += scriptContent;
-    head += renderAllHeadContent(result);
-    head += "</head>";
+    const head =
+      `<head${spreadAttributes(props)} data-capo>` +
+      rendered.toString() +
+      scriptContent +
+      renderAllHeadContent(result) +
+      "</head>";
 
     return unescapeHTML(capo(head));
-  },
+  }) as any,
 });

@@ -1,46 +1,9 @@
-import type { ElementNode } from "ultrahtml";
-import { renderSync } from "ultrahtml";
+import type { Element, Properties } from "hast";
+import { toHtml } from "hast-util-to-html";
 
-type Attributes = Record<string, string>;
+type Detector = (tag: string, p: Properties, css: string) => boolean;
 
-function has(value: unknown): value is string {
-  return typeof value === "string";
-}
-function is<T>(a: unknown, b: T): a is T {
-  return a === b;
-}
-function any(a: string | undefined, b: string[]): a is string {
-  return has(a) && b.includes(a.toLowerCase());
-}
-
-export const ElementWeights: Record<string, number> = {
-  META: 10,
-  TITLE: 9,
-  PRECONNECT: 8,
-  ASYNC_SCRIPT: 7,
-  IMPORT_STYLES: 6,
-  SYNC_SCRIPT: 5,
-  SYNC_STYLES: 4,
-  PRELOAD: 3,
-  DEFER_SCRIPT: 2,
-  PREFETCH_PRERENDER: 1,
-  OTHER: 0,
-};
-
-export const ElementDetectors = {
-  META: isMeta,
-  TITLE: isTitle,
-  PRECONNECT: isPreconnect,
-  DEFER_SCRIPT: isDeferScript,
-  ASYNC_SCRIPT: isAsyncScript,
-  IMPORT_STYLES: isImportStyles,
-  SYNC_SCRIPT: isSyncScript,
-  SYNC_STYLES: isSyncStyles,
-  PRELOAD: isPreload,
-  PREFETCH_PRERENDER: isPrefetchPrerender,
-};
-
-export const META_HTTP_EQUIV_KEYWORDS = [
+const META_HTTP_EQUIV_KEYWORDS = [
   "accept-ch",
   "content-security-policy",
   "content-type",
@@ -50,83 +13,55 @@ export const META_HTTP_EQUIV_KEYWORDS = [
   "x-dns-prefetch-control",
 ];
 
-export function isMeta(name: string, a: Attributes) {
-  if (name === "base") return true;
-  if (name !== "meta") return false;
-  return (
-    has(a.charset) ||
-    is(a.name, "viewport") ||
-    any(a["http-equiv"], META_HTTP_EQUIV_KEYWORDS)
-  );
+function has(value: unknown): boolean {
+  return value != null && value !== false;
 }
 
-export function isTitle(name: string) {
-  return name === "title";
+function str(value: unknown): string | undefined {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) return value[0]?.toString();
+  return undefined;
 }
 
-export function isPreconnect(name: string, { rel }: Attributes) {
-  return name === "link" && is(rel, "preconnect");
-}
+const RULES: [number, Detector][] = [
+  [10, (tag, p) => {
+    if (tag === "base") return true;
+    if (tag !== "meta") return false;
+    return has(p.charSet) || str(p.name) === "viewport" ||
+      META_HTTP_EQUIV_KEYWORDS.includes(str(p.httpEquiv)?.toLowerCase() ?? "");
+  }],
+  [9, (tag) => tag === "title"],
+  [8, (tag, p) => tag === "link" && str(p.rel) === "preconnect"],
+  [7, (tag, p) => tag === "script" && has(p.src) && has(p.async)],
+  [6, (tag, _, css) => tag === "style" && /@import/.test(css)],
+  [5, (tag, p) => {
+    if (tag !== "script") return false;
+    const type = str(p.type) ?? "";
+    return !((has(p.src) && (has(p.defer) || has(p.async) || type === "module")) || type.includes("json"));
+  }],
+  [4, (tag, p) => tag === "style" || (tag === "link" && str(p.rel) === "stylesheet")],
+  [3, (tag, p) => {
+    const rel = str(p.rel)?.toLowerCase();
+    return tag === "link" && (rel === "preload" || rel === "modulepreload");
+  }],
+  [2, (tag, p) => {
+    if (tag !== "script") return false;
+    return (has(p.src) && has(p.defer)) ||
+      (has(p.src) && str(p.type) === "module" && !has(p.async));
+  }],
+  [1, (tag, p) => {
+    const rel = str(p.rel)?.toLowerCase();
+    return tag === "link" && (rel === "prefetch" || rel === "dns-prefetch" || rel === "prerender");
+  }],
+];
 
-export function isAsyncScript(name: string, { src, async }: Attributes) {
-  return name === "script" && has(src) && has(async);
-}
+export function getWeight(element: Element): number {
+  const css = element.tagName === "style" && element.children.length > 0
+    ? toHtml(element)
+    : "";
 
-export function isImportStyles(
-  name: string,
-  _a: Attributes,
-  children: string,
-) {
-  if (name === "style") {
-    return /@import/.test(children);
+  for (const [weight, detect] of RULES) {
+    if (detect(element.tagName, element.properties, css)) return weight;
   }
-  return false;
-}
-
-export function isSyncScript(
-  name: string,
-  { src, defer, async, type = "" }: Attributes,
-) {
-  if (name !== "script") return false;
-  return !(
-    (has(src) && (has(defer) || has(async) || is(type, "module"))) ||
-    type.includes("json")
-  );
-}
-
-export function isSyncStyles(name: string, { rel }: Attributes) {
-  if (name === "style") return true;
-  return name === "link" && is(rel, "stylesheet");
-}
-
-export function isPreload(name: string, { rel }: Attributes) {
-  return name === "link" && any(rel, ["preload", "modulepreload"]);
-}
-
-export function isDeferScript(
-  name: string,
-  { src, defer, async, type }: Attributes,
-) {
-  if (name !== "script") return false;
-  return (
-    (has(src) && has(defer)) ||
-    (has(src) && is(type, "module") && !has(async))
-  );
-}
-
-export function isPrefetchPrerender(name: string, { rel }: Attributes) {
-  return name === "link" && any(rel, ["prefetch", "dns-prefetch", "prerender"]);
-}
-
-export function getWeight(element: ElementNode) {
-  for (const [id, detector] of Object.entries(ElementDetectors)) {
-    const children =
-      element.name === "style" && element.children.length > 0
-        ? renderSync(element)
-        : "";
-    if (detector(element.name, element.attributes, children)) {
-      return ElementWeights[id];
-    }
-  }
-  return ElementWeights.OTHER;
+  return 0;
 }

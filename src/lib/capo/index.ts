@@ -1,39 +1,32 @@
-import type { ElementNode, Node } from "ultrahtml";
-import { parse, walkSync, renderSync, ELEMENT_NODE } from "ultrahtml";
+import type { RootContent } from "hast";
+import { fromHtml } from "hast-util-from-html";
+import { toHtml } from "hast-util-to-html";
 import { getWeight } from "./rules.ts";
 
-export default function capo(html: string) {
-  const ast = parse(html);
-  try {
-    walkSync(ast, (node, parent, index) => {
-      if (node.type === ELEMENT_NODE && node.name === "head") {
-        if (parent) {
-          parent.children.splice(index, 1, getSortedHead(node));
-          throw "done";
-        }
-      }
-    });
-  } catch (e) {
-    if (e !== "done") throw e;
-  }
-  return renderSync(ast);
-}
+const HEAD_OPEN_RE = /^<head[^>]*>/;
 
-function getSortedHead(head: ElementNode): ElementNode {
-  const elements: [number, Node][] = [];
-  const nonElements: Node[] = [];
+export default function capo(html: string): string {
+  const openMatch = html.match(HEAD_OPEN_RE);
+  if (!openMatch) return html;
 
-  for (const node of head.children) {
-    if (node.type === ELEMENT_NODE) {
-      elements.push([getWeight(node), node]);
+  const openTag = openMatch[0];
+  const inner = html.slice(openTag.length, html.lastIndexOf("</head>"));
+
+  const tree = fromHtml(inner, { fragment: true });
+
+  const weighted: [number, RootContent][] = [];
+  const rest: RootContent[] = [];
+
+  for (const node of tree.children) {
+    if (node.type === "element") {
+      weighted.push([getWeight(node), node]);
     } else {
-      nonElements.push(node);
+      rest.push(node);
     }
   }
 
-  elements.sort((a, b) => b[0] - a[0]);
-  const children: Node[] = elements.map(([_, el]) => el);
-  children.push(...nonElements);
+  weighted.sort((a, b) => b[0] - a[0]);
+  tree.children = [...weighted.map(([, node]) => node), ...rest];
 
-  return { ...head, children };
+  return openTag + toHtml(tree) + "</head>";
 }
