@@ -1,16 +1,8 @@
 @import "tailwindcss";
 
-::view-transition-old(root) {
-  animation: none;
-}
-
-::view-transition-new(root) {
-  animation: fade-in 200ms ease-in-out;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
+html {
+  @media (min-width: 1024px) {
+    scrollbar-gutter: stable;
   }
 }
 
