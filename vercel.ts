@@ -14,5 +14,10 @@ export const config: VercelConfig = {
        maxAge: '1 year',
        immutable: true
      }),
+     routes.cacheControl('/_server-islands/(.*)', {
+       public: true,
+       maxAge: '1 hour',
+       staleWhileRevalidate: '1 day'
+     }),
    ],
 };
