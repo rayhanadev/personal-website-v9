@@ -1,4 +1,4 @@
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
@@ -32,16 +32,5 @@ export default defineConfig({
   },
   experimental: {
     clientPrerender: true,
-    fonts: [
-      {
-        provider: fontProviders.fontshare(),
-        name: "General Sans",
-        cssVariable: "--font-general-sans",
-        weights: ["400 900"],
-        styles: ["normal"],
-        subsets: ["latin"],
-        formats: ["woff2"],
-      },
-    ],
   },
 });

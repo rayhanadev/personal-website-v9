@@ -1,7 +1,6 @@
 ---
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
-import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { Head } from "../lib/capo/Head.ts";
 import Favicons from "../components/Favicons.astro";
@@ -28,7 +27,9 @@ const { title, description, keywords } = Astro.props;
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        <Font cssVariable="--font-general-sans" preload />
+        <link rel="preload" href="/fonts/GeneralSans-Regular-latin.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/fonts/GeneralSans-Semibold-az.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/fonts/GeneralSans-Bold-name.woff2" as="font" type="font/woff2" crossorigin />
 
         <Favicons />
         <SEO title={title} description={description} keywords={keywords} />
