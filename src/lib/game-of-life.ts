@@ -1,16 +1,3 @@
-const KONAMI_CODE = [
-  "ArrowUp",
-  "ArrowUp",
-  "ArrowDown",
-  "ArrowDown",
-  "ArrowLeft",
-  "ArrowRight",
-  "ArrowLeft",
-  "ArrowRight",
-  "KeyB",
-  "KeyA",
-];
-
 interface GameOfLife {
   start: () => void;
   stop: (onComplete?: () => void) => void;
@@ -108,23 +95,4 @@ export function createGameOfLife(canvas: HTMLCanvasElement): GameOfLife {
       worker?.postMessage({ type: "stop" });
     },
   };
-}
-
-export function setupKonamiCode(onActivate: () => void): () => void {
-  let index = 0;
-
-  function handleKeyDown(e: KeyboardEvent): void {
-    if (e.code === KONAMI_CODE[index]) {
-      index++;
-      if (index === KONAMI_CODE.length) {
-        index = 0;
-        onActivate();
-      }
-    } else {
-      index = e.code === KONAMI_CODE[0] ? 1 : 0;
-    }
-  }
-
-  window.addEventListener("keydown", handleKeyDown);
-  return () => window.removeEventListener("keydown", handleKeyDown);
 }

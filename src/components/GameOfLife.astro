@@ -1,25 +1,33 @@
 <canvas id="gol-canvas" class="fixed inset-0 pointer-events-none -z-10 opacity-0 invisible" transition:persist></canvas>
 
 <script>
-  import { createGameOfLife, setupKonamiCode } from "../lib/game-of-life";
+  import { createGameOfLife } from "../lib/game-of-life";
 
   let gol: ReturnType<typeof createGameOfLife> | null = null;
   let active = false;
-  let cleanupKonami: (() => void) | null = null;
+  let transitioning = false;
 
   const getCanvas = (): HTMLCanvasElement | null =>
     document.getElementById("gol-canvas") as HTMLCanvasElement | null;
 
-  function showGame(canvas: HTMLCanvasElement): void {
+  function syncToggle(): void {
+    document.getElementById("gol-toggle")?.setAttribute("aria-checked", String(active));
+  }
+
+  function show(canvas: HTMLCanvasElement): void {
     active = true;
+    syncToggle();
     canvas.classList.remove("opacity-0", "invisible");
     document.body.classList.add("select-none");
     gol?.start();
   }
 
-  function hideGame(canvas: HTMLCanvasElement): void {
+  function hide(canvas: HTMLCanvasElement): void {
     active = false;
+    transitioning = true;
+    syncToggle();
     gol?.stop(() => {
+      transitioning = false;
       canvas.classList.add("opacity-0", "invisible");
       document.body.classList.remove("select-none");
     });
@@ -31,20 +39,23 @@
 
     if (!gol) {
       gol = createGameOfLife(canvas);
+
       window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && active) {
-          const c = getCanvas();
-          if (c) hideGame(c);
-        }
+        if (e.key === "Escape" && active && !transitioning) hide(canvas);
+      });
+
+      document.addEventListener("click", (e) => {
+        if (transitioning) return;
+        if (!(e.target as Element).closest("#gol-toggle")) return;
+        if (active) hide(canvas);
+        else show(canvas);
       });
     }
 
-    cleanupKonami?.();
-    cleanupKonami = setupKonamiCode(() => {
-      if (!active) showGame(canvas);
-    });
+    syncToggle();
   }
 
+  document.addEventListener("astro:after-swap", syncToggle);
   document.addEventListener("astro:page-load", init);
   init();
 </script>

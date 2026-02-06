@@ -50,13 +50,20 @@ const commitSha = import.meta.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev";
         <img src={LinkedIn.src} alt="" width="20" height="20" loading="lazy" class="size-5 select-none" />
       </a>
     </div>
-    <p class="text-base leading-5">{commitSha} on ▲</p>
+    <div class="flex items-center gap-2 text-base leading-5">
+      <p>{commitSha} on ▲</p>
+      <span class="pb-0.5" aria-hidden="true">•</span>
+      <button id="gol-toggle" role="switch" aria-checked="false" aria-label="Game of Life" class="gol-toggle group relative w-6 h-3.5 mt-px rounded-full bg-neutral-300 cursor-pointer shrink-0 transition-colors duration-200 ease-out aria-checked:bg-black active:scale-95 motion-reduce:transition-none">
+        <span class="absolute top-[2px] left-[2px] size-2.5 rounded-full bg-white block will-change-transform transition-transform duration-200 ease-in-out group-aria-checked:translate-x-2.5 motion-reduce:transition-none"></span>
+      </button>
+    </div>
   </div>
 </footer>
 
 <style>
   @media (pointer: coarse) {
-    .social-link::before {
+    .social-link::before,
+    .gol-toggle::before {
       content: "";
       position: absolute;
       display: block;
