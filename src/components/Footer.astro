@@ -30,7 +30,7 @@ const commitSha = import.meta.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev";
       <span>PH: (</span>
       {webringLinks.map((link, i) => (
         <>
-          <Link href={getWebringUrl(link.type)}>{link.label}</Link>
+          <Link href={getWebringUrl(link.type)} target="_self">{link.label}</Link>
           {i < webringLinks.length - 1 && <span>|</span>}
         </>
       ))}
