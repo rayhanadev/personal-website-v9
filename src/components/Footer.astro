@@ -41,13 +41,13 @@ const commitSha = import.meta.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev";
   <div class="flex flex-col justify-end items-end gap-2">
     <div class="flex items-start gap-5">
       <a href="https://x.com/rayhanadev" target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="opacity-60 transition-opacity duration-200 ease-out outline-none hover:opacity-100 focus:opacity-100 motion-reduce:transition-none">
-        <img src={Twitter.src} alt="" width="20" height="20" loading="lazy" class="size-5" />
+        <img src={Twitter.src} alt="" width="20" height="20" loading="lazy" class="size-5 select-none" />
       </a>
       <a href="https://github.com/rayhanadev" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="opacity-60 transition-opacity duration-200 ease-out outline-none hover:opacity-100 focus:opacity-100 motion-reduce:transition-none">
-        <img src={Github.src} alt="" width="20" height="20" loading="lazy" class="size-5" />
+        <img src={Github.src} alt="" width="20" height="20" loading="lazy" class="size-5 select-none" />
       </a>
       <a href="https://linkedin.com/in/rayhanadev" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="opacity-60 transition-opacity duration-200 ease-out outline-none hover:opacity-100 focus:opacity-100 motion-reduce:transition-none">
-        <img src={LinkedIn.src} alt="" width="20" height="20" loading="lazy" class="size-5" />
+        <img src={LinkedIn.src} alt="" width="20" height="20" loading="lazy" class="size-5 select-none" />
       </a>
     </div>
     <p class="text-base leading-5">{commitSha} on ▲</p>
