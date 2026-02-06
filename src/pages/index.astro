@@ -11,6 +11,28 @@ export const prerender = true;
 >
   <section class="flex-1 mb-6 flex flex-col gap-4">
     <h2 class="text-[20px] leading-[22px] font-semibold">Writings</h2>
-    <Writings server:defer />
+    <Writings server:defer>
+      <div slot="fallback" class="flex flex-col gap-2 animate-pulse">
+        {Array.from({ length: 6 }).map(() => (
+          <div class="flex gap-4 sm:gap-6 py-1">
+            <div class="h-5 w-[100px] bg-neutral-100 rounded shrink-0" />
+            <div class="h-5 bg-neutral-100 rounded" style="width: var(--skeleton-w)" />
+          </div>
+        ))}
+      </div>
+      <style>
+        @property --skeleton-w {
+          syntax: "<length-percentage>";
+          inherits: false;
+          initial-value: 50%;
+        }
+        [slot="fallback"] > div:nth-child(1) { --skeleton-w: 60% }
+        [slot="fallback"] > div:nth-child(2) { --skeleton-w: 45% }
+        [slot="fallback"] > div:nth-child(3) { --skeleton-w: 70% }
+        [slot="fallback"] > div:nth-child(4) { --skeleton-w: 55% }
+        [slot="fallback"] > div:nth-child(5) { --skeleton-w: 40% }
+        [slot="fallback"] > div:nth-child(6) { --skeleton-w: 65% }
+      </style>
+    </Writings>
   </section>
 </Layout>

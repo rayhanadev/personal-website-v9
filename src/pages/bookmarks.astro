@@ -15,6 +15,33 @@ export const prerender = true;
     <p class="text-base leading-5">
       Articles and links I've saved while browsing. See my <Link href="https://curius.app/ray-arayilakath">Curius profile</Link> for highlights and notes.
     </p>
-    <BookmarksList server:defer />
+    <BookmarksList server:defer>
+      <div slot="fallback" class="flex flex-col gap-2 animate-pulse">
+        {Array.from({ length: 10 }).map(() => (
+          <div class="flex gap-4 sm:gap-6 py-1">
+            <div class="h-5 w-[100px] bg-neutral-100 rounded shrink-0" />
+            <div class="h-5 bg-neutral-100 rounded" style="width: var(--skeleton-w)" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <style>
+        @property --skeleton-w {
+          syntax: "<length-percentage>";
+          inherits: false;
+          initial-value: 50%;
+        }
+        [slot="fallback"] > div:nth-child(1) { --skeleton-w: 200px }
+        [slot="fallback"] > div:nth-child(2) { --skeleton-w: 260px }
+        [slot="fallback"] > div:nth-child(3) { --skeleton-w: 180px }
+        [slot="fallback"] > div:nth-child(4) { --skeleton-w: 300px }
+        [slot="fallback"] > div:nth-child(5) { --skeleton-w: 220px }
+        [slot="fallback"] > div:nth-child(6) { --skeleton-w: 170px }
+        [slot="fallback"] > div:nth-child(7) { --skeleton-w: 280px }
+        [slot="fallback"] > div:nth-child(8) { --skeleton-w: 240px }
+        [slot="fallback"] > div:nth-child(9) { --skeleton-w: 190px }
+        [slot="fallback"] > div:nth-child(10) { --skeleton-w: 250px }
+      </style>
+    </BookmarksList>
   </section>
 </Layout>
