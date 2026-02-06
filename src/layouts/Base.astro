@@ -9,6 +9,7 @@ import Favicons from "../components/Favicons.astro";
 import SEO from "../components/SEO.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import GameOfLife from "../components/GameOfLife.astro";
 
 import "../styles/global.css";
 
@@ -57,6 +58,7 @@ const { title, description, keywords } = Astro.props;
         </script>
     </Head>
     <body class="flex flex-col items-center flex-1 min-h-dvh w-full antialiased leading-relaxed">
+        <GameOfLife />
         <main class="w-184 flex flex-col gap-4 font-sans pt-20 pb-10 flex-1" transition:animate="slide">
             <Header transition:persist />
             <slot />
