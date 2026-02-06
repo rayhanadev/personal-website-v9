@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Base.astro";
 import BookmarksList from "../components/BookmarksList.astro";
+import Link from "../components/Link.astro";
 
 export const prerender = true;
 ---
@@ -9,5 +10,11 @@ export const prerender = true;
   title="Bookmarks - Ray Arayilakath"
   description="Links and articles saved by Ray Arayilakath."
 >
-  <BookmarksList server:defer />
+  <section class="flex-1 mb-6 flex flex-col gap-4">
+    <h2 class="text-[20px] leading-[22px] font-semibold">Bookmarks</h2>
+    <p class="text-base leading-5">
+      Articles and links I've saved while browsing. See my <Link href="https://curius.app/ray-arayilakath">Curius profile</Link> for highlights and notes.
+    </p>
+    <BookmarksList server:defer />
+  </section>
 </Layout>
