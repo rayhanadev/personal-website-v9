@@ -4,6 +4,8 @@ import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import astroCompress from "gab-astro-compress";
 
+import mdx from "@astrojs/mdx";
+
 export default defineConfig({
   output: "server",
   adapter: vercel({
@@ -20,7 +22,7 @@ export default defineConfig({
     "/rss.xml": "https://rayhanadev.substack.com/feed",
     "/blog": "https://substack.com/@rayhanadev",
   },
-  integrations: [sitemap(), astroCompress()],
+  integrations: [sitemap(), astroCompress(), mdx()],
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "load",

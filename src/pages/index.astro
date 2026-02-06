@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Base.astro";
 import Writings from "../components/Writings.astro";
+
+export const prerender = true;
 ---
 
 <Layout
@@ -8,7 +10,7 @@ import Writings from "../components/Writings.astro";
   description="Platform Engineer @ Million (YC W24). Previously at Replit, Deel. 5+ years of experience growing engineering at YC-backed startups."
 >
   <canvas id="gol-canvas" class="fixed inset-0 pointer-events-none -z-10 opacity-0 invisible"></canvas>
-  <Writings />
+  <Writings server:defer />
 </Layout>
 
 <script>

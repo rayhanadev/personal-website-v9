@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Base.astro";
 import BookmarksList from "../components/BookmarksList.astro";
+
+export const prerender = true;
 ---
 
 <Layout
   title="Bookmarks - Ray Arayilakath"
   description="Links and articles saved by Ray Arayilakath."
 >
-  <BookmarksList />
+  <BookmarksList server:defer />
 </Layout>

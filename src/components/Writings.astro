@@ -9,7 +9,7 @@ const response = await fetch("https://rayhanadev.substack.com/api/v1/posts?limit
 const posts: SubstackPost[] = await response.json();
 ---
 
-<section class="w-184 flex flex-col gap-4 font-sans">
+<section class="flex-1 mb-6 flex flex-col gap-4">
   <h2 class="text-[20px] leading-[22px] font-semibold">Writings</h2>
   <div class="writings-list relative flex flex-col">
     <div class="writings-indicator absolute bg-black rounded-sm pointer-events-none will-change-transform"></div>

@@ -1,15 +1,19 @@
 ---
 import Layout from "../layouts/Base.astro";
+import { Content as AboutContent } from "../components/About.mdx";
+import Link from "../components/Link.astro";
+
+export const prerender = true;
 ---
 
 <Layout
   title="About - Ray Arayilakath"
   description="About Ray Arayilakath - Platform Engineer @ Million (YC W24). Previously at Replit, Deel."
 >
-  <section class="w-184 flex flex-col gap-4 font-sans">
-    <h2 class="text-[20px] leading-[22px] font-semibold">About</h2>
-    <p class="text-base leading-5">
-      Coming soon.
-    </p>
-  </section>
+    <div class="flex-1 mb-6 flex flex-col gap-4">
+        <h2 class="text-[20px] leading-[22px] font-semibold">About</h2>
+        <article class="text-base leading-6 [&>p]:mb-4 [&>h2]:text-lg [&>h2]:font-semibold [&>h2]:mt-8 [&>h2]:mb-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-4 [&>ul]:mb-4">
+            <AboutContent components={{ a: Link }} />
+        </article>
+    </div>
 </Layout>
