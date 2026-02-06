@@ -6,18 +6,18 @@ interface Props {
   [key: string]: any;
 }
 
-const { href, class: className, unstyled = false, ...rest } = Astro.props;
+const { href, class: className, unstyled = false, target, ...rest } = Astro.props;
 
 const isExternal = href.startsWith("http://") || href.startsWith("https://");
 const linkClass = unstyled ? className : ["underline underline-offset-2 decoration-[#ccc] outline-none transition-[text-decoration-color] duration-200 ease-out hover:decoration-black focus:decoration-black cursor-pointer", className];
 ---
 
 {isExternal ? (
-  <a href={href} target="_blank" rel="noopener noreferrer" class:list={linkClass} {...rest}>
+  <a href={href} target={target ?? "_blank"} rel="noopener noreferrer" class:list={linkClass} {...rest}>
     <slot />
   </a>
 ) : (
-  <a href={href} class:list={linkClass} {...rest}>
+  <a href={href} target={target} class:list={linkClass} {...rest}>
     <slot />
   </a>
 )}
