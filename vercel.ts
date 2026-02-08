@@ -7,6 +7,7 @@ export const config: VercelConfig = {
     routes.redirect("/contact", "/contact.vcf", { permanent: true }),
     routes.redirect("/rss.xml", "https://rayhanadev.substack.com/feed"),
     routes.redirect("/blog", "https://substack.com/@rayhanadev"),
+    routes.redirect("/admin", "https://rayhanadev.substack.com/publish/home"),
    ],
    headers: [
      routes.cacheControl('/static/(.*)', {
